@@ -50,9 +50,7 @@ public class WikiCrawler {
 		int index = 0;
 		while(matcher.find(index)){
 			String wholething = matcher.group();
-			System.out.println(wholething);// includes "<a href" and ">"
 				String link = matcher.group();
-				// i tried removed a href but it doesn't work
 				int x =link.indexOf("\"");
 				String resulturl = link.substring(x);
 				links.add(resulturl);
