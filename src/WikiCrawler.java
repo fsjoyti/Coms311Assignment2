@@ -40,17 +40,21 @@ public class WikiCrawler {
 	public ArrayList<String> extractLinks(String doc) throws IOException {
 		//lol right now its getting the link we are NOT supposed to extract. Gotta understand what pattern and matcher does
 		new_doc = after_p(doc);
+		
 		ArrayList<String> links = new ArrayList<String>();
 		String html = new_doc;
-		String regex = "<a href\\s?=\\s?\"([^\"]+)\">";
+		String regex = "<a href\\s?=\\s?\"/(\\bwiki)[(/\\w+)]+\"";
+		
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(html);
 		int index = 0;
 		while(matcher.find(index)){
-			String wholething = matcher.group(); // includes "<a href" and ">"
-				String link = matcher.group(1);
+			String wholething = matcher.group();
+			System.out.println(wholething);// includes "<a href" and ">"
+				String link = matcher.group();
+				link.replaceAll("<a href=", "");
 				links.add(link);
-				//index++;
+				index++;
 
 
 		        index = matcher.end();
@@ -97,7 +101,7 @@ public class WikiCrawler {
 
 		modified_doc = modified_doc.substring(modified_doc.lastIndexOf("<p>") + 3); // Ignore
 																					// Case??
-																					// Test
+		System.out.println(modified_doc);																		// Test
 																					// for
 																					// <P>
 
