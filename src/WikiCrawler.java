@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.net.*;
 
 public class WikiCrawler {
 
@@ -22,7 +23,7 @@ public class WikiCrawler {
 	 *            name of a file–The graph will be written to this file
 	 */
 	public WikiCrawler(String seedUrl, int max, String fileName) {
-		seedUrl = seedUrl;
+		this.seedUrl = seedUrl;
 		max = max;
 		fileName = fileName;
 	}
@@ -67,7 +68,10 @@ public class WikiCrawler {
 	/**
 	 * 
 	 */
-	private void crawl() {
+	public void crawl() {
+		String s = "https://en.wikipedia.org/" + seedUrl;
+		System.out.println(s);
+		
 
 	}
 
@@ -100,9 +104,7 @@ public class WikiCrawler {
 		}
 
 		modified_doc = modified_doc.substring(modified_doc.lastIndexOf("<p>") + 3); // Ignore
-																					// Case??
-		System.out.println(modified_doc);																		// Test
-																					// for
+											// for
 																					// <P>
 
 		return modified_doc;
