@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -18,6 +19,7 @@ public class WikiCrawler {
 	int max;
 	String fileName;
 	String new_doc = "";
+	String htmldoc = "htmldoc.txt";
 
 	/**
 	 * 
@@ -82,10 +84,17 @@ public class WikiCrawler {
 		 Set<String> marked = new HashSet<>();
 		 marked.add(seedUrl);
 		 while(!q.isEmpty()){
-			 String v = q.remove();
+			 String v = q.poll();
 			 String currentPage = BASE_URL+v;
 			 System.out.println(currentPage);
+			 System.out.println(marked.size());
+			 
 			 readhtml(currentPage);
+			 System.out.println(extractLinks(htmldoc));
+			 
+			 if (marked.size() > max){
+				 return;
+			 }
 			 
 		 }
 		 
@@ -94,9 +103,22 @@ public class WikiCrawler {
 	}
 
 	private void readhtml(String currentPage) throws MalformedURLException, IOException {
+		PrintWriter writer = new PrintWriter(htmldoc, "UTF-8");
+		System.out.println(currentPage);
 		URL url = new URL(currentPage);
-		 InputStream is = url.openStream();
-		 BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		URLConnection yc = url.openConnection(); 
+		
+		 BufferedReader br = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+		 StringBuilder sb = new StringBuilder();
+		 String tmp = null;
+		 while( br.readLine()!=null){
+			 tmp = br.readLine();
+			 
+			 writer.print(tmp);
+			
+		 }
+		
+		
 		 
 	}
 
