@@ -2,14 +2,16 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Queue;
+import java.util.Set;
 import java.net.*;
 
 public class WikiCrawler {
-
+    String BASE_URL = "https://en.wikipedia.org";
 	String seedUrl;
 	int max;
 	String fileName;
@@ -71,11 +73,16 @@ public class WikiCrawler {
 	 * 
 	 */
 	public void crawl() {
-		String s = "https://en.wikipedia.org/" + seedUrl;
-		System.out.println(s);
+		
 		 Queue<String> q = new LinkedList<>();
 		 q.add(seedUrl);
-		 System.out.println(q.peek());
+		 Set<String> marked = new HashSet<>();
+		 marked.add(seedUrl);
+		 while(!q.isEmpty()){
+			 String v = q.remove();
+			 String s = BASE_URL+v;
+			 System.out.println(s);
+		 }
 		 
 		
 
