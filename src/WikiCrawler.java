@@ -32,8 +32,8 @@ public class WikiCrawler {
 	 */
 	public WikiCrawler(String seedUrl, int max, String fileName) {
 		this.seedUrl = seedUrl;
-		max = max;
-		fileName = fileName;
+		this.max = max;
+		this.fileName = fileName;
 	}
 
 	/**
@@ -79,6 +79,7 @@ public class WikiCrawler {
 	 */
 	public void crawl() throws IOException,MalformedURLException  {
 		
+		ArrayList<String> links = new ArrayList<String>();
 		 Queue<String> q = new LinkedList<>();
 		 q.add(seedUrl);
 		 Set<String> marked = new HashSet<>();
@@ -86,18 +87,26 @@ public class WikiCrawler {
 		 while(!q.isEmpty()){
 			 String v = q.poll();
 			 String currentPage = BASE_URL+v;
-			 System.out.println(currentPage);
-			 System.out.println(marked.size());
-			 
+			
+			 if (marked.size() <= max){
 			 readhtml(currentPage);
 			 System.out.println(extractLinks(htmldoc));
-			 
-			 if (marked.size() > max){
-				 return;
+			 links = extractLinks(htmldoc);
+			 // i am not sure if this is 100 % correct yet and i don'tknow how to set a wait period for sending requests
+			 for (int i = 0; i < links.size(); i++){
+				 String unmarked = links.get(i);
+				 if (!marked.contains(v)){
+					 q.add(unmarked);
+					 marked.add(unmarked);
+				 }
+				 
 			 }
 			 
+			 
+			 
+			 
 		 }
-		 
+		 }
 		
 
 	}
@@ -107,6 +116,7 @@ public class WikiCrawler {
 		System.out.println(currentPage);
 		URL url = new URL(currentPage);
 		URLConnection yc = url.openConnection(); 
+		
 		
 		 BufferedReader br = new BufferedReader(new InputStreamReader(yc.getInputStream()));
 		 StringBuilder sb = new StringBuilder();
