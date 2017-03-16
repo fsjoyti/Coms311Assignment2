@@ -3,15 +3,19 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Queue;
+import java.util.Set;
 import java.net.*;
 
 public class WikiCrawler {
-
+    String BASE_URL = "https://en.wikipedia.org";
 	String seedUrl;
 	int max;
 	String fileName;
@@ -70,17 +74,32 @@ public class WikiCrawler {
 	}
 
 	/**
+	 * @throws IOException, 
 	 * 
 	 */
-	public void crawl() {
-		String s = "https://en.wikipedia.org/" + seedUrl;
-		System.out.println(s);
+	public void crawl() throws IOException,MalformedURLException  {
+		
 		 Queue<String> q = new LinkedList<>();
 		 q.add(seedUrl);
-		 System.out.println(q.peek());
+		 Set<String> marked = new HashSet<>();
+		 marked.add(seedUrl);
+		 while(!q.isEmpty()){
+			 String v = q.remove();
+			 String currentPage = BASE_URL+v;
+			 System.out.println(currentPage);
+			 readhtml(currentPage);
+			 
+		 }
 		 
 		
 
+	}
+
+	private void readhtml(String currentPage) throws MalformedURLException, IOException {
+		URL url = new URL(currentPage);
+		 InputStream is = url.openStream();
+		 BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		 
 	}
 
 	/**
