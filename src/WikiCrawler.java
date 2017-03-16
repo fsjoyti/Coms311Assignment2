@@ -2,8 +2,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Queue;
 import java.net.*;
 
 public class WikiCrawler {
@@ -71,6 +73,10 @@ public class WikiCrawler {
 	public void crawl() {
 		String s = "https://en.wikipedia.org/" + seedUrl;
 		System.out.println(s);
+		 Queue<String> q = new LinkedList<>();
+		 q.add(seedUrl);
+		 System.out.println(q.peek());
+		 
 		
 
 	}
