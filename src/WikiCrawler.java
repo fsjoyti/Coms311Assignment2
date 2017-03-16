@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -70,9 +72,10 @@ public class WikiCrawler {
 	}
 
 	/**
+	 * @throws IOException, 
 	 * 
 	 */
-	public void crawl() {
+	public void crawl() throws IOException,MalformedURLException  {
 		
 		 Queue<String> q = new LinkedList<>();
 		 q.add(seedUrl);
@@ -80,12 +83,21 @@ public class WikiCrawler {
 		 marked.add(seedUrl);
 		 while(!q.isEmpty()){
 			 String v = q.remove();
-			 String s = BASE_URL+v;
-			 System.out.println(s);
+			 String currentPage = BASE_URL+v;
+			 System.out.println(currentPage);
+			 readhtml(currentPage);
+			 
 		 }
 		 
 		
 
+	}
+
+	private void readhtml(String currentPage) throws MalformedURLException, IOException {
+		URL url = new URL(currentPage);
+		 InputStream is = url.openStream();
+		 BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		 
 	}
 
 	/**
