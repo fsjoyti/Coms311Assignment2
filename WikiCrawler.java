@@ -47,7 +47,7 @@ public class WikiCrawler {
 	 */
 
 	public ArrayList<String> extractLinks(String doc) throws IOException {
-		//lol right now its getting the link we are NOT supposed to extract. Gotta understand what pattern and matcher does
+
 		new_doc = after_p(doc);
 		
 		ArrayList<String> links = new ArrayList<String>();
@@ -64,7 +64,6 @@ public class WikiCrawler {
 				String resulturl = link.substring(x);
 				links.add(resulturl);
 				index++;
-
 
 		        index = matcher.end();
 		}
@@ -90,16 +89,15 @@ public class WikiCrawler {
 			 readhtml(currentPage);
 			 
 		 }
-		 
-		
 
 	}
 
 	private void readhtml(String currentPage) throws MalformedURLException, IOException {
+		
 		URL url = new URL(currentPage);
-		 InputStream is = url.openStream();
-		 BufferedReader br = new BufferedReader(new InputStreamReader(is));
-		 
+		InputStream is = url.openStream();
+		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		
 	}
 
 	/**
