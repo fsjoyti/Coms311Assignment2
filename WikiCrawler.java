@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -20,6 +21,7 @@ public class WikiCrawler {
 	int max;
 	String fileName;
 	String new_doc = "";
+	String htmldoc = "htmldoc.txt";
 
 	/**
 	 * 
@@ -32,8 +34,8 @@ public class WikiCrawler {
 	 */
 	public WikiCrawler(String seedUrl, int max, String fileName) {
 		this.seedUrl = seedUrl;
-		max = max;
-		fileName = fileName;
+		this.max = max;
+		this.fileName = fileName;
 	}
 
 	/**
@@ -78,25 +80,62 @@ public class WikiCrawler {
 	 */
 	public void crawl() throws IOException,MalformedURLException  {
 		
+		 ArrayList<String> links = new ArrayList<String>();
 		 Queue<String> q = new LinkedList<>();
 		 q.add(seedUrl);
 		 Set<String> marked = new HashSet<>();
 		 marked.add(seedUrl);
+		 int count = 0;
 		 while(!q.isEmpty()){
-			 String v = q.remove();
+			 String v = q.poll();
+			 v = v.replaceAll("^\"|\"$", "");
+			 count ++;
+			 System.out.println("count is: " +count);
+			 System.out.println("v is: " +v);
 			 String currentPage = BASE_URL+v;
-			 System.out.println(currentPage);
-			 readhtml(currentPage);
 			 
+			 if (marked.size() <= max){
+			 readhtml(currentPage);
+			 System.out.println(extractLinks(htmldoc));
+			 links = extractLinks(htmldoc);
+			 // i am not sure if this is 100 % correct yet and i don'tknow how to set a wait period for sending requests
+			 for (int i = 0; i < links.size(); i++){
+				 String unmarked = links.get(i);
+				 if (!marked.contains(unmarked)){
+					 q.add(unmarked);
+					 marked.add(unmarked);
+				 }
+			 }
+			 }
+				 
 		 }
+
 
 	}
 
+	/**
+	 * gets the HTML tag passed in and writes to a file
+	 * @param currentPage
+	 * @throws MalformedURLException
+	 * @throws IOException
+	 */
 	private void readhtml(String currentPage) throws MalformedURLException, IOException {
 		
+		PrintWriter writer = new PrintWriter(htmldoc, "UTF-8");
+		System.out.println("Current page: " +currentPage);
 		URL url = new URL(currentPage);
-		InputStream is = url.openStream();
-		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		URLConnection yc = url.openConnection(); 
+		
+		
+		 BufferedReader br = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+		 StringBuilder sb = new StringBuilder();
+		 String tmp = null;
+		 while( br.readLine()!=null){
+			 tmp = br.readLine();
+			// System.out.println("the HTML doc is: " +tmp);
+			 writer.print(tmp);
+			
+		 }
 		
 	}
 
