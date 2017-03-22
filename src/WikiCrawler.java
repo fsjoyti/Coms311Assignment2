@@ -86,29 +86,36 @@ public class WikiCrawler {
 		 Set<String> marked = new HashSet<>();
 		 marked.add(seedUrl);
 		 int count = 0;
-		 while(!q.isEmpty()){
+		 int reachable_size = 0;
+		 while(!q.isEmpty() && count <= max ){
 			 String v = q.poll();
 			 v = v.replaceAll("^\"|\"$", "");
-			 count ++;
+			 
 			 System.out.println("count is: " +count);
 			 System.out.println("v is: " +v);
 			 String currentPage = BASE_URL+v;
 			 
-			 if (marked.size() <= max){
+			// if (marked.size() <= 500){
 			 readhtml(currentPage);
 			 System.out.println(extractLinks(htmldoc));
 			 links = extractLinks(htmldoc);
+			 reachable_size = links.size();
+			 
+			count++;
 			 // i am not sure if this is 100 % correct yet and i don'tknow how to set a wait period for sending requests
-			 for (int i = 0; i < links.size(); i++){
+			 for (int i = 0; i < reachable_size; i++){
 				 String unmarked = links.get(i);
+				 System.out.println("unmarked is: " + unmarked);
 				 if (!marked.contains(unmarked)){
 					 q.add(unmarked);
 					 marked.add(unmarked);
 				 }
 			 }
+			 
+			 
 			 }
 				 
-		 }
+		// }
 
 
 	}
@@ -166,10 +173,13 @@ public class WikiCrawler {
 			}
 
 		}
-
+		try{
 		modified_doc = modified_doc.substring(modified_doc.lastIndexOf("<p>") + 3); // Ignore
-											// for
-																					// <P>
+		}
+		catch (Exception e){
+			System.out.println("No p tags exist");
+		}
+       																		// <P>
 
 		return modified_doc;
 	}
