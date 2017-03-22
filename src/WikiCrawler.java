@@ -131,8 +131,13 @@ public class WikiCrawler {
 		PrintWriter writer = new PrintWriter(htmldoc, "UTF-8");
 		System.out.println("Current page: " +currentPage);
 		URL url = new URL(currentPage);
-		URLConnection yc = url.openConnection(); 
 		
+
+
+		HttpURLConnection yc =(HttpURLConnection) url.openConnection(); 
+//give it 15 seconds to respond
+		yc.setReadTimeout(3*1000);
+		yc.connect();
 		
 		 BufferedReader br = new BufferedReader(new InputStreamReader(yc.getInputStream()));
 		 StringBuilder sb = new StringBuilder();
