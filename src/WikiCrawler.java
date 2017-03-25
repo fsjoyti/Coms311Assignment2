@@ -7,8 +7,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Queue;
@@ -23,6 +27,7 @@ public class WikiCrawler {
 	String fileName;
 	String new_doc = "";
 	String htmldoc = "htmldoc.txt";
+	Map<String, List<String>> edges = new HashMap<String, List<String>>();
 
 	/**
 	 * 
@@ -61,7 +66,7 @@ public class WikiCrawler {
 		Matcher matcher = pattern.matcher(html);
 		int index = 0;
 		while(matcher.find(index)){
-			String wholething = matcher.group();
+			    String wholething = matcher.group();
 				String link = matcher.group();
 				int x =link.indexOf("\"");
 				String resulturl = link.substring(x);
@@ -88,37 +93,64 @@ public class WikiCrawler {
 		 marked.add(seedUrl);
 		
 		 int reachable_size = 0;
+		 
 		 while(!q.isEmpty() && count <= max ){
+			 
 			 String v = q.poll();
 			 v = v.replaceAll("^\"|\"$", "");
 			 
-			 //System.out.println("count is: " +count);
-			// System.out.println("v is: " +v);
 			 String currentPage = BASE_URL+v;
 			 
-			// if (marked.size() <= 500){
 			 readhtml(currentPage);
-			 //System.out.println(extractLinks(htmldoc));
 			 links = extractLinks(htmldoc);
 			 reachable_size = links.size();
-			 
-			 
+	
 			 for (int i = 0; i < reachable_size; i++){
 				 String unmarked = links.get(i);
-				 //System.out.println("unmarked is: " + unmarked);
-				 if (!marked.contains(unmarked)){
+				 //addEdge(v, unmarked);
+				 if (!marked.contains(unmarked) && unmarked != v){
 					 q.add(unmarked);
 					 marked.add(unmarked);
+					 addEdge(v, unmarked);
 				 }
 			 }
+			 
+			 
 			 count++;
 
 		}
-		 Long endTime = System.currentTimeMillis()/1000;
-		 System.out.println("Total time: " +(endTime - startTime)) ;
+		 System.out.println("The marked hashSet is: " +marked);
+		 
+		// Long endTime = System.currentTimeMillis()/1000;
+		// System.out.println("Total time: " +(endTime - startTime)) ;
 
 	}
 
+	
+	private void addEdge(String src, String dest){
+		List<String> srcNeighbours = this.edges.get(src);
+		if(srcNeighbours == null){
+			this.edges.put(src, srcNeighbours = new ArrayList<String>());
+		}
+		srcNeighbours.add(dest);
+		
+	}
+	
+	public Map<String, List<String>> map(){
+		return edges;
+		
+	}
+	
+	private Iterable<String> getNeighbours(String vertex){
+		List<String> neighbours = this.edges.get(vertex);
+		if(neighbours == null){
+			return Collections.emptyList();
+		}
+		else{
+			return Collections.unmodifiableList(neighbours);
+		}
+	}
+	
 	/**
 	 * gets the HTML tag passed in and writes to a file
 	 * @param currentPage
