@@ -80,7 +80,7 @@ public class WikiCrawler {
 	 * 
 	 */
 	public void crawl() throws IOException,MalformedURLException  {
-		
+		 Long startTime = System.currentTimeMillis()/1000;
 		 ArrayList<String> links = new ArrayList<String>();
 		 Queue<String> q = new LinkedList<>();
 		 q.add(seedUrl);
@@ -92,29 +92,30 @@ public class WikiCrawler {
 			 String v = q.poll();
 			 v = v.replaceAll("^\"|\"$", "");
 			 
-			 System.out.println("count is: " +count);
-			 System.out.println("v is: " +v);
+			 //System.out.println("count is: " +count);
+			// System.out.println("v is: " +v);
 			 String currentPage = BASE_URL+v;
 			 
 			// if (marked.size() <= 500){
 			 readhtml(currentPage);
-			 System.out.println(extractLinks(htmldoc));
+			 //System.out.println(extractLinks(htmldoc));
 			 links = extractLinks(htmldoc);
 			 reachable_size = links.size();
 			 
-			count++;
-			 // i am not sure if this is 100 % correct yet and i don'tknow how to set a wait period for sending requests
+			 
 			 for (int i = 0; i < reachable_size; i++){
 				 String unmarked = links.get(i);
-				 System.out.println("unmarked is: " + unmarked);
+				 //System.out.println("unmarked is: " + unmarked);
 				 if (!marked.contains(unmarked)){
 					 q.add(unmarked);
 					 marked.add(unmarked);
 				 }
 			 }
-			 
-			 
+			 count++;
+
 		}
+		 Long endTime = System.currentTimeMillis()/1000;
+		 System.out.println("Total time: " +(endTime - startTime)) ;
 
 	}
 
@@ -127,31 +128,18 @@ public class WikiCrawler {
 	private void readhtml(String currentPage) throws MalformedURLException, IOException {
 		
 		PrintWriter writer = new PrintWriter(htmldoc, "UTF-8");
-		System.out.println("Current page: " +currentPage);
+		//System.out.println("Current page: " +currentPage);
 		URL url = new URL(currentPage);
 		
-
-
-		/*HttpURLConnection yc =(HttpURLConnection) url.openConnection(); 
-		//give it 15 seconds to respond
-		yc.setReadTimeout(3*1000);
-		yc.connect();
-		
-		 BufferedReader br = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-		 StringBuilder sb = new StringBuilder();
-		 String tmp = null;
-		 while( br.readLine()!=null){
-			 tmp = br.readLine();
-			// System.out.println("the HTML doc is: " +tmp);
-			 writer.print(tmp);
-			 writer.println();
-		 }
-		*/
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		
 		BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-		if(count == 100)
-			connection.setReadTimeout(15*1000);
+		
+		if(count > 1 && count%100 == 1){
+			System.out.println("Count is: "+count);
+			System.out.println("Waiting 3 secs");
+			connection.setReadTimeout(3*1000);
+		}
 		//String temp = null;
 		String inputLine = in.readLine();
 		while((inputLine != null)){
@@ -191,7 +179,7 @@ public class WikiCrawler {
 
 		}
 		try{
-		modified_doc = modified_doc.substring(modified_doc.lastIndexOf("<p>") + 3); // Ignore
+			modified_doc = modified_doc.substring(modified_doc.lastIndexOf("<p>") + 3); // Ignore
 		}
 		catch (Exception e){
 			System.out.println("No p tags exist");
