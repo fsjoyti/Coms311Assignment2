@@ -147,16 +147,11 @@ public class WikiCrawler {
 			 writer.println();
 		 }
 		*/
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		
-		BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+		BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		if(count == 100)
-		try {
-			
-			url.wait(3*1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			connection.setReadTimeout(15*1000);
 		//String temp = null;
 		String inputLine = in.readLine();
 		while((inputLine != null)){
