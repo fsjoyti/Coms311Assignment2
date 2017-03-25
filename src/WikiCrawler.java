@@ -19,6 +19,7 @@ public class WikiCrawler {
     String BASE_URL = "https://en.wikipedia.org";
 	String seedUrl;
 	int max;
+	int count = 0;
 	String fileName;
 	String new_doc = "";
 	String htmldoc = "htmldoc.txt";
@@ -85,7 +86,7 @@ public class WikiCrawler {
 		 q.add(seedUrl);
 		 Set<String> marked = new HashSet<>();
 		 marked.add(seedUrl);
-		 int count = 0;
+		
 		 int reachable_size = 0;
 		 while(!q.isEmpty() && count <= max ){
 			 String v = q.poll();
@@ -148,6 +149,14 @@ public class WikiCrawler {
 		*/
 		
 		BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+		if(count == 100)
+		try {
+			
+			url.wait(3*1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//String temp = null;
 		String inputLine = in.readLine();
 		while((inputLine != null)){
