@@ -113,10 +113,7 @@ public class WikiCrawler {
 			 }
 			 
 			 
-			 }
-				 
-		// }
-
+		}
 
 	}
 
@@ -134,8 +131,8 @@ public class WikiCrawler {
 		
 
 
-		HttpURLConnection yc =(HttpURLConnection) url.openConnection(); 
-//give it 15 seconds to respond
+		/*HttpURLConnection yc =(HttpURLConnection) url.openConnection(); 
+		//give it 15 seconds to respond
 		yc.setReadTimeout(3*1000);
 		yc.connect();
 		
@@ -146,9 +143,20 @@ public class WikiCrawler {
 			 tmp = br.readLine();
 			// System.out.println("the HTML doc is: " +tmp);
 			 writer.print(tmp);
-			
+			 writer.println();
 		 }
+		*/
 		
+		BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+		//String temp = null;
+		String inputLine = in.readLine();
+		while((inputLine != null)){
+			writer.print(inputLine);
+			writer.println();
+			inputLine = in.readLine();
+			
+			//System.out.println(inputLine);
+		}
 	}
 
 	/**
