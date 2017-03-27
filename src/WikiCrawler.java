@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class WikiCrawler {
 	String new_doc = "";
 	String htmldoc = "htmldoc.txt";
 	Map<String, List<String>> edges = new HashMap<String, List<String>>();
-
+	//List<String> srcNeighbours = (List<String>) edges.keySet();
 	/**
 	 * 
 	 * @param seedUrl
@@ -111,19 +112,32 @@ public class WikiCrawler {
 				 if (!marked.contains(unmarked) && unmarked != v){
 					 q.add(unmarked);
 					 marked.add(unmarked);
+					 
 					 addEdge(v, unmarked);
 				 }
 			 }
+			
+			/* try{
+				    PrintWriter writer = new PrintWriter("marked.txt", "UTF-8");
+				    //writer.println(edges);
+				   // for (int i = 0; i < marked.size(); i++) {
+				        writer.println(marked);//+ " " + srcNeighbours.get(edges.get(i)));
+				  //  }
+				    writer.close();
+				} catch (IOException e) {
+				   // do something
+				}
+			 */
 			 
 			 
 			 count++;
 
 		}
-		 System.out.println("The marked hashSet is: " +marked);
+		 //System.out.println("The marked hashSet size is: " +marked.size());
 		 
 		// Long endTime = System.currentTimeMillis()/1000;
 		// System.out.println("Total time: " +(endTime - startTime)) ;
-
+		// System.out.println(marked);
 	}
 
 	
@@ -131,13 +145,25 @@ public class WikiCrawler {
 		List<String> srcNeighbours = this.edges.get(src);
 		if(srcNeighbours == null){
 			this.edges.put(src, srcNeighbours = new ArrayList<String>());
+			
 		}
 		srcNeighbours.add(dest);
 		
 	}
 	
-	public Map<String, List<String>> map(){
-		return edges;
+	//public Map<String, List<String>> map(){
+	public void map(){
+		try{
+		    PrintWriter writer = new PrintWriter("my_edges.txt", "UTF-8");
+		    //writer.println(edges);
+		   // for (int i = 0; i < edges.size(); i++) {
+		        writer.println(edges );//+ " " + srcNeighbours.get(edges.get(i)));
+		  //  }
+		    writer.close();
+		} catch (IOException e) {
+		   // do something
+		}
+		//return edges;
 		
 	}
 	
@@ -178,7 +204,6 @@ public class WikiCrawler {
 			writer.print(inputLine);
 			writer.println();
 			inputLine = in.readLine();
-			
 			//System.out.println(inputLine);
 		}
 	}
