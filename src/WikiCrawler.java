@@ -1,11 +1,13 @@
 
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,6 +31,7 @@ public class WikiCrawler {
 	String new_doc = "";
 	String htmldoc = "htmldoc.txt";
 	Map<String, List<String>> edges = new HashMap<String, List<String>>();
+	PrintWriter writer;
 	//List<String> srcNeighbours = (List<String>) edges.keySet();
 	/**
 	 * 
@@ -43,6 +46,8 @@ public class WikiCrawler {
 		this.seedUrl = seedUrl;
 		this.max = max;
 		this.fileName = fileName;
+		
+		
 	}
 
 	/**
@@ -86,6 +91,7 @@ public class WikiCrawler {
 	 * 
 	 */
 	public void crawl() throws IOException,MalformedURLException  {
+		writer = new PrintWriter(this.fileName, "UTF-8");
 		 Long startTime = System.currentTimeMillis()/1000;
 		 ArrayList<String> links = new ArrayList<String>();
 		 Queue<String> q = new LinkedList<>();
@@ -96,9 +102,10 @@ public class WikiCrawler {
 		 int reachable_size = 0;
 		 
 		 while(!q.isEmpty() && count <= max ){
-			 
+			 System.out.println(count);
 			 String v = q.poll();
 			 v = v.replaceAll("^\"|\"$", "");
+			 System.out.println(v);
 			 
 			 String currentPage = BASE_URL+v;
 			 
@@ -108,32 +115,26 @@ public class WikiCrawler {
 	
 			 for (int i = 0; i < reachable_size; i++){
 				 String unmarked = links.get(i);
+				 System.out.println(unmarked);
 				 //addEdge(v, unmarked);
 				 if (!marked.contains(unmarked) && unmarked != v){
 					 q.add(unmarked);
 					 marked.add(unmarked);
+					 writer.print(v + " "+unmarked);
 					 
-					 addEdge(v, unmarked);
+					
 				 }
 			 }
 			
-			/* try{
-				    PrintWriter writer = new PrintWriter("marked.txt", "UTF-8");
-				    //writer.println(edges);
-				   // for (int i = 0; i < marked.size(); i++) {
-				        writer.println(marked);//+ " " + srcNeighbours.get(edges.get(i)));
-				  //  }
-				    writer.close();
-				} catch (IOException e) {
-				   // do something
-				}
-			 */
+			
 			 
 			 
 			 count++;
 
 		}
-		 //System.out.println("The marked hashSet size is: " +marked.size());
+		 
+		 
+		 System.out.println("The marked hashSet size is: " +marked);
 		 
 		// Long endTime = System.currentTimeMillis()/1000;
 		// System.out.println("Total time: " +(endTime - startTime)) ;
@@ -141,41 +142,12 @@ public class WikiCrawler {
 	}
 
 	
-	private void addEdge(String src, String dest){
-		List<String> srcNeighbours = this.edges.get(src);
-		if(srcNeighbours == null){
-			this.edges.put(src, srcNeighbours = new ArrayList<String>());
-			
-		}
-		srcNeighbours.add(dest);
-		
-	}
+	
 	
 	//public Map<String, List<String>> map(){
-	public void map(){
-		try{
-		    PrintWriter writer = new PrintWriter("my_edges.txt", "UTF-8");
-		    //writer.println(edges);
-		   // for (int i = 0; i < edges.size(); i++) {
-		        writer.println(edges );//+ " " + srcNeighbours.get(edges.get(i)));
-		  //  }
-		    writer.close();
-		} catch (IOException e) {
-		   // do something
-		}
-		//return edges;
-		
-	}
 	
-	private Iterable<String> getNeighbours(String vertex){
-		List<String> neighbours = this.edges.get(vertex);
-		if(neighbours == null){
-			return Collections.emptyList();
-		}
-		else{
-			return Collections.unmodifiableList(neighbours);
-		}
-	}
+	
+	
 	
 	/**
 	 * gets the HTML tag passed in and writes to a file
