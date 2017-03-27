@@ -145,6 +145,30 @@ public class WikiCrawler {
 	
 	
 	//public Map<String, List<String>> map(){
+<<<<<<< HEAD
+=======
+	public void map(){
+		try{
+		    PrintWriter writer = new PrintWriter("my_edges.txt", "UTF-8");
+		    //writer.println(edges);
+		   // for (int i = 0; i < edges.size(); i++) {
+		      for(String name : edges.keySet() ){
+		    	  String key = name.toString();
+		    	  String value = edges.get(name).toString();
+		    	  writer.println(value);
+		    	  
+		      }
+		       // writer.println(edges );//+ " " + srcNeighbours.get(edges.get(i)));
+		  //  }
+		      System.out.println("Done printing values");
+		    writer.close();
+		} catch (IOException e) {
+		   // do something
+		}
+		//return edges;
+		
+	}
+>>>>>>> 0ae11fe35f8d797713262cd6c840df523d7f40f3
 	
 	
 	
