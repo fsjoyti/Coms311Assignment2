@@ -117,17 +117,7 @@ public class WikiCrawler {
 				 }
 			 }
 			
-			/* try{
-				    PrintWriter writer = new PrintWriter("marked.txt", "UTF-8");
-				    //writer.println(edges);
-				   // for (int i = 0; i < marked.size(); i++) {
-				        writer.println(marked);//+ " " + srcNeighbours.get(edges.get(i)));
-				  //  }
-				    writer.close();
-				} catch (IOException e) {
-				   // do something
-				}
-			 */
+			
 			 
 			 
 			 count++;
@@ -157,8 +147,15 @@ public class WikiCrawler {
 		    PrintWriter writer = new PrintWriter("my_edges.txt", "UTF-8");
 		    //writer.println(edges);
 		   // for (int i = 0; i < edges.size(); i++) {
-		        writer.println(edges );//+ " " + srcNeighbours.get(edges.get(i)));
+		      for(String name : edges.keySet() ){
+		    	  String key = name.toString();
+		    	  String value = edges.get(name).toString();
+		    	  writer.println(value);
+		    	  
+		      }
+		       // writer.println(edges );//+ " " + srcNeighbours.get(edges.get(i)));
 		  //  }
+		      System.out.println("Done printing values");
 		    writer.close();
 		} catch (IOException e) {
 		   // do something
