@@ -1,11 +1,13 @@
 
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,8 +30,7 @@ public class WikiCrawler {
 	String fileName;
 	String new_doc = "";
 	String htmldoc = "htmldoc.txt";
-	Map<String, List<String>> edges = new HashMap<String, List<String>>();
-	//List<String> srcNeighbours = (List<String>) edges.keySet();
+	
 	/**
 	 * 
 	 * @param seedUrl
@@ -56,7 +57,7 @@ public class WikiCrawler {
 	 */
 
 	public ArrayList<String> extractLinks(String doc) throws IOException {
-
+		//PrintWriter writer = new PrintWriter("my_edges.txt", "UTF-8");
 		new_doc = after_p(doc);
 		
 		ArrayList<String> links = new ArrayList<String>();
@@ -86,6 +87,9 @@ public class WikiCrawler {
 	 * 
 	 */
 	public void crawl() throws IOException,MalformedURLException  {
+
+		 PrintWriter writer = new PrintWriter(htmldoc, "UTF-8");
+		 writer.println(max);
 		 Long startTime = System.currentTimeMillis()/1000;
 		 ArrayList<String> links = new ArrayList<String>();
 		 Queue<String> q = new LinkedList<>();
@@ -108,21 +112,24 @@ public class WikiCrawler {
 	
 			 for (int i = 0; i < reachable_size; i++){
 				 String unmarked = links.get(i);
-				 //addEdge(v, unmarked);
-				 if (!marked.contains(unmarked) && unmarked != v){
+				 writer.println(unmarked);
+				 //System.out.println("v is: " +v);
+				 unmarked = unmarked.replaceAll("^\"|\"$", "");
+				 if (!marked.contains(unmarked) && !unmarked.equals(v)){
+
 					 q.add(unmarked);
 					 marked.add(unmarked);
-					 
-					 addEdge(v, unmarked);
+					 System.out.println(unmarked);
 				 }
 			 }
-			
 			
 			 
 			 
 			 count++;
 
 		}
+		 writer.close();
+		
 		 //System.out.println("The marked hashSet size is: " +marked.size());
 		 
 		// Long endTime = System.currentTimeMillis()/1000;
@@ -131,48 +138,6 @@ public class WikiCrawler {
 	}
 
 	
-	private void addEdge(String src, String dest){
-		List<String> srcNeighbours = this.edges.get(src);
-		if(srcNeighbours == null){
-			this.edges.put(src, srcNeighbours = new ArrayList<String>());
-			
-		}
-		srcNeighbours.add(dest);
-		
-	}
-	
-	//public Map<String, List<String>> map(){
-	public void map(){
-		try{
-		    PrintWriter writer = new PrintWriter("my_edges.txt", "UTF-8");
-		    //writer.println(edges);
-		   // for (int i = 0; i < edges.size(); i++) {
-		      for(String name : edges.keySet() ){
-		    	  String key = name.toString();
-		    	  String value = edges.get(name).toString();
-		    	  writer.println(value);
-		    	  
-		      }
-		       // writer.println(edges );//+ " " + srcNeighbours.get(edges.get(i)));
-		  //  }
-		      System.out.println("Done printing values");
-		    writer.close();
-		} catch (IOException e) {
-		   // do something
-		}
-		//return edges;
-		
-	}
-	
-	private Iterable<String> getNeighbours(String vertex){
-		List<String> neighbours = this.edges.get(vertex);
-		if(neighbours == null){
-			return Collections.emptyList();
-		}
-		else{
-			return Collections.unmodifiableList(neighbours);
-		}
-	}
 	
 	/**
 	 * gets the HTML tag passed in and writes to a file
@@ -181,7 +146,6 @@ public class WikiCrawler {
 	 * @throws IOException
 	 */
 	private void readhtml(String currentPage) throws MalformedURLException, IOException {
-		
 		PrintWriter writer = new PrintWriter(htmldoc, "UTF-8");
 		//System.out.println("Current page: " +currentPage);
 		URL url = new URL(currentPage);
