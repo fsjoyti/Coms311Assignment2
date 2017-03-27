@@ -31,6 +31,7 @@ public class WikiCrawler {
 	String new_doc = "";
 	String htmldoc = "htmldoc.txt";
 	
+	//List<String> srcNeighbours = (List<String>) edges.keySet();
 	/**
 	 * 
 	 * @param seedUrl
@@ -44,6 +45,8 @@ public class WikiCrawler {
 		this.seedUrl = seedUrl;
 		this.max = max;
 		this.fileName = fileName;
+		
+		
 	}
 
 	/**
@@ -88,8 +91,12 @@ public class WikiCrawler {
 	 */
 	public void crawl() throws IOException,MalformedURLException  {
 
-		 PrintWriter writer = new PrintWriter(htmldoc, "UTF-8");
+
+		 PrintWriter writer = new PrintWriter("my_edges.txt", "UTF-8");
 		 writer.println(max);
+
+		// writer = new PrintWriter(this.fileName, "UTF-8");
+
 		 Long startTime = System.currentTimeMillis()/1000;
 		 ArrayList<String> links = new ArrayList<String>();
 		 Queue<String> q = new LinkedList<>();
@@ -100,9 +107,10 @@ public class WikiCrawler {
 		 int reachable_size = 0;
 		 
 		 while(!q.isEmpty() && count <= max ){
-			 
+			 //System.out.println(count);
 			 String v = q.poll();
 			 v = v.replaceAll("^\"|\"$", "");
+			 //System.out.println(v);
 			 
 			 String currentPage = BASE_URL+v;
 			 
@@ -112,33 +120,33 @@ public class WikiCrawler {
 	
 			 for (int i = 0; i < reachable_size; i++){
 				 String unmarked = links.get(i);
-				 writer.println(unmarked);
+
+				 //writer.println(unmarked);
 				 //System.out.println("v is: " +v);
 				 unmarked = unmarked.replaceAll("^\"|\"$", "");
-				 if (!marked.contains(unmarked) && !unmarked.equals(v)){
-
+				 if (!marked.contains(unmarked) && unmarked.equals(v) == false){
 					 q.add(unmarked);
 					 marked.add(unmarked);
-					 System.out.println(unmarked);
+				     System.out.println(v + "" +unmarked);
+				     writer.println(v + " "  +unmarked);
+				    
 				 }
-			 }
 			
 			 
-			 
+			 }
 			 count++;
-
-		}
+			 
+		 }
+		 System.out.println("Count is: "+count);
 		 writer.close();
-		
 		 //System.out.println("The marked hashSet size is: " +marked.size());
-		 
 		// Long endTime = System.currentTimeMillis()/1000;
 		// System.out.println("Total time: " +(endTime - startTime)) ;
 		// System.out.println(marked);
 	}
 
 	
-	
+
 	/**
 	 * gets the HTML tag passed in and writes to a file
 	 * @param currentPage
