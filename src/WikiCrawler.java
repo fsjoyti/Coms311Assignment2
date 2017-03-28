@@ -30,6 +30,7 @@ public class WikiCrawler {
 	String fileName;
 	String new_doc = "";
 	String htmldoc = "htmldoc.txt";
+	Map<String, List<String>> inedge = new HashMap<String, List<String>>();
 	
 	//List<String> srcNeighbours = (List<String>) edges.keySet();
 	/**
@@ -91,7 +92,6 @@ public class WikiCrawler {
 	 */
 	public void crawl() throws IOException,MalformedURLException  {
 
-
 		 PrintWriter writer = new PrintWriter("my_edges.txt", "UTF-8");
 		 writer.println(max);
 
@@ -99,16 +99,22 @@ public class WikiCrawler {
 
 		 Long startTime = System.currentTimeMillis()/1000;
 		 ArrayList<String> links = new ArrayList<String>();
+		 ArrayList<String> modified_unmarked = new ArrayList<String>();
 		 Queue<String> q = new LinkedList<>();
-		 q.add(seedUrl);
+		 q .add(seedUrl);
 		 Set<String> marked = new HashSet<>();
+		
+		 
 		 marked.add(seedUrl);
 		
 		 int reachable_size = 0;
+		 int count_vertices = 0;
 		 
 		 while(!q.isEmpty() && count <= max ){
+			
 			 //System.out.println(count);
 			 String v = q.poll();
+			 modified_unmarked.add(v);
 			 v = v.replaceAll("^\"|\"$", "");
 			 //System.out.println(v);
 			 
@@ -117,27 +123,31 @@ public class WikiCrawler {
 			 readhtml(currentPage);
 			 links = extractLinks(htmldoc);
 			 reachable_size = links.size();
-	
+			 System.out.println("reachable size: " +reachable_size);
 			 for (int i = 0; i < reachable_size; i++){
 				 String unmarked = links.get(i);
 
 				 //writer.println(unmarked);
 				 //System.out.println("v is: " +v);
 				 unmarked = unmarked.replaceAll("^\"|\"$", "");
-				 if (!marked.contains(unmarked) && unmarked.equals(v) == false){
+				 if (!marked.contains(unmarked) && unmarked.equals(v) == false && count_vertices <= max){
+					 modified_unmarked.add(unmarked);
 					 q.add(unmarked);
+					 count_vertices++;
+					 
 					 marked.add(unmarked);
-				     System.out.println(v + "" +unmarked);
+					
+				    // System.out.println(v + "" +unmarked);
 				     writer.println(v + " "  +unmarked);
 				    
 				 }
-			
-			 
+				
 			 }
 			 count++;
-			 
+			 count_vertices = 0;
 		 }
 		 System.out.println("Count is: "+count);
+		 System.out.println("Vertices count: " +count_vertices);
 		 writer.close();
 		 //System.out.println("The marked hashSet size is: " +marked.size());
 		// Long endTime = System.currentTimeMillis()/1000;
