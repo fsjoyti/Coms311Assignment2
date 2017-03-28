@@ -39,7 +39,7 @@ public class WikiCrawler {
 	 * @param max
 	 *            Maximum number pages to be crawled
 	 * @param fileName
-	 *            name of a file�The graph will be written to this file
+	 *            name of a file–The graph will be written to this file
 	 */
 	public WikiCrawler(String seedUrl, int max, String fileName) {
 		this.seedUrl = seedUrl;
@@ -89,7 +89,7 @@ public class WikiCrawler {
 	 * @throws IOException, 
 	 * 
 	 */
-	public void crawl() throws IOException,MalformedURLException  {
+	/*public void crawl() throws IOException,MalformedURLException  {
 
 		 PrintWriter writer = new PrintWriter("my_edges.txt", "UTF-8");
 		 writer.println(max);
@@ -151,8 +151,69 @@ public class WikiCrawler {
 		// System.out.println("Total time: " +(endTime - startTime)) ;
 		// System.out.println(marked);
 	}
+*/
+	public void crawl() throws IOException,MalformedURLException  {
+		
+		PrintWriter writer = new PrintWriter("my_edges.txt", "UTF-8");
+		writer.println(max);
+		
+		//Counter to keep track of total number of pages visited
+		int numVerticesVisited = 0;
+		
+		//Initialize a Queue Q and a list visited.
+		Queue<String> q = new LinkedList<>();
+		q .add(seedUrl);
+		
+		ArrayList<String> visited = new ArrayList<String>();
+		ArrayList<String> links = new ArrayList<String>();
+		
+		// Place seed url in Q and visited.
+		q.add(seedUrl);
+		visited.add(seedUrl);
+		
+		//while Q is not empty Do
+		while(!q.isEmpty() && count <= max){
+			
+			//Let currentPage be the first element of Q.
+			String v = q.poll();
+			v = v.replaceAll("^\"|\"$", "");
+			String currentPage = BASE_URL+v;
+			// Send a request to server at currentPage and download currentPage
+			readhtml(currentPage);
+			//Extract all links from currentPage
+			links = extractLinks(htmldoc);
+			//For every link u that appears in currentPage
+			for(String u : links){
+				u = u.replaceAll("^\"|\"$", "");
+				
+				//Counter to keep track of total number of pages visited
+				numVerticesVisited = 1;
+				//If u /∈ visited add u to the end of Q, and add u to visited.
+				if(!visited.contains(u) && u.equals(v) == false ){//&& numVerticesVisited < max){
+					//System.out.println("u is: " +u);
+					q.add(u);
+					visited.add(u);
+					numVerticesVisited ++;
+					if(numVerticesVisited < max){
+						String firstStrings = u;
+						writer.println(v + " "  +firstStrings);
+					}
+						
+					//When you crawl one site, 
+					//writer.println(v + " "  +u);
+				}
+				
+			}
+			count ++;
+		}
+		for(int i = 0; i<visited.size(); i++){
 
-	
+			System.out.println("visited list: " +visited.get(i));
+		}
+		 System.out.println("count is " +count);
+		 System.out.println("num of pages visited: " +numVerticesVisited);
+		writer.close();
+	}
 
 	/**
 	 * gets the HTML tag passed in and writes to a file
