@@ -6,12 +6,10 @@ import java.util.*;
 
 public class GraphProcessor {
 
-	Map<String, List<String>> adjacency_list = new HashMap<String, List<String>>();
-	int numVertices;
+		Map<String, List<String>> adjacency_list = new HashMap<String, List<String>>();
+		int numVertices;
 
 	
-		
-
 		public GraphProcessor(String graphData) throws FileNotFoundException{
 			File f = new File(graphData);
 			Scanner input = new Scanner(f);

@@ -159,17 +159,17 @@ public class WikiCrawler {
 		
 		PrintWriter writer = new PrintWriter("my_edges.txt", "UTF-8");
 		writer.println(max);
-		
+		String edges = null;
 		//Counter to keep track of total number of pages visited
 		int numVerticesVisited = 0;
 		
 		//Initialize a Queue Q and a list visited.
 		Queue<String> q = new LinkedList<>();
 		q .add(seedUrl);
-		
+		ArrayList<String> values = new ArrayList<String>();
 		ArrayList<String> visited = new ArrayList<String>();
 		ArrayList<String> links = new ArrayList<String>();
-		
+		//ArrayList<String> maxtoVisit = new ArrayList<String>(max);
 		// Place seed url in Q and visited.
 		q.add(seedUrl);
 		visited.add(seedUrl);
@@ -180,39 +180,71 @@ public class WikiCrawler {
 			//Let currentPage be the first element of Q.
 			String v = q.poll();
 			v = v.replaceAll("^\"|\"$", "");
+			//maxtoVisit.add(v);
 			String currentPage = BASE_URL+v;
 			// Send a request to server at currentPage and download currentPage
 			readhtml(currentPage);
 			//Extract all links from currentPage
 			links = extractLinks(htmldoc);
 			//For every link u that appears in currentPage
-			for(String u : links){
-				u = u.replaceAll("^\"|\"$", "");
-				
+			//numVerticesVisited = 1;
+			//for(String u  : links){
+			for (int i = 0; i <= max; i++){
+				System.out.println("getting links");
+				edges = links.get(i);
+				//u = u.replaceAll("^\"|\"$", "");
+				edges = edges.replaceAll("^\"|\"$", "");
 				//Counter to keep track of total number of pages visited
-				numVerticesVisited = 1;
+				
 				//If u /∈ visited add u to the end of Q, and add u to visited.
-				if(!visited.contains(u) && u.equals(v) == false ){//&& numVerticesVisited < max){
+				if(!visited.contains(edges) && edges.equals(v) == false ){//&& numVerticesVisited < max){
 					//System.out.println("u is: " +u);
-					q.add(u);
-					visited.add(u);
+					q.add(edges);
+					visited.add(edges);
 					numVerticesVisited ++;
-					if(numVerticesVisited < max){
-						String firstStrings = u;
-						writer.println(v + " "  +firstStrings);
-					}
+					writer.println(v + " "  +edges);
+				/*	if(numVerticesVisited <= max){
+						//String firstStrings = u;
+						//writer.println(v + " "  +firstStrings);
+						//maxtoVisit.add(u);
+						values.add(edges);
 						
+						System.out.println("num vertices visited " +numVerticesVisited );
+					}*/
+					
+					
 					//When you crawl one site, 
 					//writer.println(v + " "  +u);
 				}
 				
+					
 			}
 			count ++;
+			
 		}
-		for(int i = 0; i<visited.size(); i++){
+		
+		for(int i = 0; i<max; i++){
+			values.add(visited.get(i));
+		}
+		
+	/*	for(int i= 0; i<maxtoVisit.size() ; i++){
+			for(int j =0; j<visited.size(); j++){
+				if(maxtoVisit.get(i) == visited.get(j)){
+					values.add(visited.get(j));
+				}
+			}
+		}
+		for(int i = 0; i<values.size(); i++){
 
-			System.out.println("visited list: " +visited.get(i));
-		}
+			System.out.println("value pages: " +values.get(i));
+		//	System.out.println("max visited pages: " +maxtoVisit.get(i));
+		}*/
+		/*for(int i = 1; i<maxtoVisit.size(); i++){
+
+		//	System.out.println("visited list: " +visited.get(i));
+			System.out.println("max visited pages: " +maxtoVisit.get(i));
+		}*/
+		
 		 System.out.println("count is " +count);
 		 System.out.println("num of pages visited: " +numVerticesVisited);
 		writer.close();
