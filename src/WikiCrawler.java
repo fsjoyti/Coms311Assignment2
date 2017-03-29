@@ -66,7 +66,7 @@ public class WikiCrawler {
 		
 		ArrayList<String> links = new ArrayList<String>();
 		String html = new_doc;
-		String regex = "<a\\s?href\\s?=\\s?\"/(\\bwiki)[(/\\w+)]+\"";
+		String regex = "<a\\s?href\\s?=\\s?\"/(\\bwiki)[(/\\w+)%]+\"";
 		
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(html);
@@ -175,10 +175,11 @@ public class WikiCrawler {
 		visited.add(seedUrl);
 		
 		//while Q is not empty Do
-		while(!q.isEmpty() && count <= max){
+		while(!q.isEmpty() ){
 			
 			//Let currentPage be the first element of Q.
 			String v = q.poll();
+			System.out.println("v: "+v);
 			v = v.replaceAll("^\"|\"$", "");
 			String currentPage = BASE_URL+v;
 			// Send a request to server at currentPage and download currentPage
@@ -193,13 +194,20 @@ public class WikiCrawler {
 				numVerticesVisited = 1;
 				//If u /∈ visited add u to the end of Q, and add u to visited.
 				if(!visited.contains(u) && u.equals(v) == false ){//&& numVerticesVisited < max){
+					
 					//System.out.println("u is: " +u);
+					if (count <= max){
 					q.add(u);
+					count ++;
+					System.out.println("u:"+u);
 					visited.add(u);
 					numVerticesVisited ++;
-					if(numVerticesVisited < max){
-						String firstStrings = u;
-						writer.println(v + " "  +firstStrings);
+				//	if(numVerticesVisited < max){
+					//	String firstStrings = u;
+						////System.out.println("firstStrings:"+u);
+						//System.out.println(firstStrings);
+						writer.println(v + " ");
+					//}
 					}
 						
 					//When you crawl one site, 
@@ -207,7 +215,7 @@ public class WikiCrawler {
 				}
 				
 			}
-			count ++;
+			
 		}
 		for(int i = 0; i<visited.size(); i++){
 
