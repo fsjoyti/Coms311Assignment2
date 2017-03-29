@@ -90,7 +90,7 @@ public class WikiCrawler {
 	 * @throws IOException, 
 	 * 
 	 */
-	/*public void crawl() throws IOException,MalformedURLException  {
+	public void crawl() throws IOException,MalformedURLException  {
 
 		 PrintWriter writer = new PrintWriter("my_edges.txt", "UTF-8");
 		 writer.println(max);
@@ -110,7 +110,7 @@ public class WikiCrawler {
 		 int reachable_size = 0;
 		 int count_vertices = 0;
 		 
-		 while(!q.isEmpty() && count <= max ){
+		 while(!q.isEmpty()){
 			
 			 //System.out.println(count);
 			 String v = q.poll();
@@ -130,20 +130,22 @@ public class WikiCrawler {
 				 //writer.println(unmarked);
 				 //System.out.println("v is: " +v);
 				 unmarked = unmarked.replaceAll("^\"|\"$", "");
-				 if (!marked.contains(unmarked) && unmarked.equals(v) == false && count_vertices <= max){
+				 if (!marked.contains(unmarked) && unmarked.equals(v) == false){
+					 if (count <= max){
 					 modified_unmarked.add(unmarked);
 					 q.add(unmarked);
-					 count_vertices++;
+					 count++;
+					
 					 
 					 marked.add(unmarked);
 					
-				    // System.out.println(v + "" +unmarked);
+				     System.out.println(v + "" +unmarked);
 				     writer.println(v + " "  +unmarked);
-				    
+					 }
 				 }
 				
 			 }
-			 count++;
+			
 			 count_vertices = 0;
 		 }
 		 System.out.println("Count is: "+count);
@@ -154,22 +156,22 @@ public class WikiCrawler {
 		// System.out.println("Total time: " +(endTime - startTime)) ;
 		// System.out.println(marked);
 	}
-*/
+	/*
 	public void crawl() throws IOException,MalformedURLException  {
 		
 		PrintWriter writer = new PrintWriter("my_edges.txt", "UTF-8");
 		writer.println(max);
-		
+		String edges = null;
 		//Counter to keep track of total number of pages visited
 		int numVerticesVisited = 0;
 		
 		//Initialize a Queue Q and a list visited.
 		Queue<String> q = new LinkedList<>();
 		q .add(seedUrl);
-		
+		ArrayList<String> values = new ArrayList<String>();
 		ArrayList<String> visited = new ArrayList<String>();
 		ArrayList<String> links = new ArrayList<String>();
-		
+		//ArrayList<String> maxtoVisit = new ArrayList<String>(max);
 		// Place seed url in Q and visited.
 		q.add(seedUrl);
 		visited.add(seedUrl);
@@ -181,18 +183,24 @@ public class WikiCrawler {
 			String v = q.poll();
 			System.out.println("v: "+v);
 			v = v.replaceAll("^\"|\"$", "");
+			//maxtoVisit.add(v);
 			String currentPage = BASE_URL+v;
 			// Send a request to server at currentPage and download currentPage
 			readhtml(currentPage);
 			//Extract all links from currentPage
 			links = extractLinks(htmldoc);
 			//For every link u that appears in currentPage
-			for(String u : links){
-				u = u.replaceAll("^\"|\"$", "");
-				
+			//numVerticesVisited = 1;
+			//for(String u  : links){
+			for (int i = 0; i <= max; i++){
+				System.out.println("getting links");
+				edges = links.get(i);
+				//u = u.replaceAll("^\"|\"$", "");
+				edges = edges.replaceAll("^\"|\"$", "");
 				//Counter to keep track of total number of pages visited
-				numVerticesVisited = 1;
+				
 				//If u /∈ visited add u to the end of Q, and add u to visited.
+<<<<<<< HEAD
 				if(!visited.contains(u) && u.equals(v) == false ){//&& numVerticesVisited < max){
 					
 					//System.out.println("u is: " +u);
@@ -209,22 +217,49 @@ public class WikiCrawler {
 						writer.println(v + " ");
 					//}
 					}
-						
+=======
+				if(!visited.contains(edges) && edges.equals(v) == false ){//&& numVerticesVisited < max){
+					//System.out.println("u is: " +u);
+					q.add(edges);
+					visited.add(edges);
+					numVerticesVisited ++;
+					writer.println(v + " "  +edges);
+				/*	if(numVerticesVisited <= max){
+						//String firstStrings = u;
+						//writer.println(v + " "  +firstStrings);
+						//maxtoVisit.add(u);
+						values.add(edges);
+
+						System.out.println("num vertices visited " +numVerticesVisited );
+					}*/
+					
+					
 					//When you crawl one site, 
 					//writer.println(v + " "  +u);
-				}
-				
-			}
 			
-		}
-		for(int i = 0; i<visited.size(); i++){
 
-			System.out.println("visited list: " +visited.get(i));
+		
+		
+		
+	/*	for(int i= 0; i<maxtoVisit.size() ; i++){
+			for(int j =0; j<visited.size(); j++){
+				if(maxtoVisit.get(i) == visited.get(j)){
+					values.add(visited.get(j));
+				}
+			}
 		}
-		 System.out.println("count is " +count);
-		 System.out.println("num of pages visited: " +numVerticesVisited);
-		writer.close();
-	}
+		for(int i = 0; i<values.size(); i++){
+
+			System.out.println("value pages: " +values.get(i));
+		//	System.out.println("max visited pages: " +maxtoVisit.get(i));
+		}*/
+		/*for(int i = 1; i<maxtoVisit.size(); i++){
+
+		//	System.out.println("visited list: " +visited.get(i));
+			System.out.println("max visited pages: " +maxtoVisit.get(i));
+		}*/
+		
+	
 
 	/**
 	 * gets the HTML tag passed in and writes to a file
