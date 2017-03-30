@@ -1,5 +1,4 @@
 
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -32,6 +31,37 @@ public class WikiCrawler {
 	String htmldoc = "htmldoc.txt";
 	Map<String, List<String>> inedge = new HashMap<String, List<String>>();
 	
+	
+	
+	private class Edge{
+		
+		ArrayList<String> vertex;
+		ArrayList<String> edges;
+		
+		private Edge(ArrayList<String> vertex, ArrayList<String> edge){
+			
+			this.vertex = vertex;
+			this.edges = edge; 
+		}
+		
+		private ArrayList<String> hasEdge(){
+			ArrayList<String> reqEdges = new ArrayList<String>();
+			
+			for(int i = 0; i<vertex.size(); i++){
+				
+				if(edges.contains(vertex)){
+					
+					reqEdges.addAll(edges);
+					
+				}
+				
+				
+			}
+			return reqEdges;
+			
+		}
+		
+	}
 	//List<String> srcNeighbours = (List<String>) edges.keySet();
 	/**
 	 * 
@@ -99,20 +129,31 @@ public class WikiCrawler {
 
 		 Long startTime = System.currentTimeMillis()/1000;
 		 ArrayList<String> links = new ArrayList<String>();
-		 ArrayList<String> modified_unmarked = new ArrayList<String>();
+		 Set<String> modified_unmarked =  new HashSet<>();
+		 
+		//Initialize a Queue Q and a list visited.
 		 Queue<String> q = new LinkedList<>();
+		 
+		// Place seed url in Q and visited.
 		 q .add(seedUrl);
+		 
 		 Set<String> marked = new HashSet<>();
 		
+		 ArrayList<String> testList = new ArrayList<String>();
+
 		 
 		 marked.add(seedUrl);
 		
 		 int reachable_size = 0;
 		 int count_vertices = 0;
 		 
-		 while(!q.isEmpty()){
+			//while Q is not empty Do
+
+		 while(!q.isEmpty() ){
 			
 			 //System.out.println(count);
+			 
+			 //Let currentPage be the first element of Q.
 			 String v = q.poll();
 			 modified_unmarked.add(v);
 			 v = v.replaceAll("^\"|\"$", "");
@@ -122,42 +163,50 @@ public class WikiCrawler {
 			 
 			 readhtml(currentPage);
 			 links = extractLinks(htmldoc);
+			 
 			 reachable_size = links.size();
 			 System.out.println("reachable size: " +reachable_size);
 			 for (int i = 0; i < reachable_size; i++){
+				 
 				 String unmarked = links.get(i);
-
 				 //writer.println(unmarked);
 				 //System.out.println("v is: " +v);
 				 unmarked = unmarked.replaceAll("^\"|\"$", "");
-				 if (!marked.contains(unmarked) && unmarked.equals(v) == false){
+				 
+				 if (!marked.contains(unmarked) && unmarked.equals(v) == false){// && count_vertices <= max){
+					 
+					 writer.println(v + " "  +unmarked);
+					 count_vertices++;
+					 
 					 if (count <= max){
+						 
 					 modified_unmarked.add(unmarked);
 					 q.add(unmarked);
 					 count++;
-					
 					 
 					 marked.add(unmarked);
 					
-				     System.out.println(v + "" +unmarked);
-				     writer.println(v + " "  +unmarked);
+				     //System.out.println(v + "" +unmarked);
+				     //writer.println(v + " "  +unmarked);
 					 }
 				 }
-				
+				 count_vertices = 0;
 			 }
-			
-			 count_vertices = 0;
+			// count++;
+			 //count_vertices = 0;
 		 }
 		 System.out.println("Count is: "+count);
 		 System.out.println("Vertices count: " +count_vertices);
+		 System.out.println("marked is: " +marked);
+		
 		 writer.close();
 		 //System.out.println("The marked hashSet size is: " +marked.size());
 		// Long endTime = System.currentTimeMillis()/1000;
 		// System.out.println("Total time: " +(endTime - startTime)) ;
 		// System.out.println(marked);
 	}
-	/*
-	public void crawl() throws IOException,MalformedURLException  {
+
+	/*public void crawl() throws IOException,MalformedURLException  {
 		
 		PrintWriter writer = new PrintWriter("my_edges.txt", "UTF-8");
 		writer.println(max);
@@ -200,7 +249,7 @@ public class WikiCrawler {
 				//Counter to keep track of total number of pages visited
 				
 				//If u /∈ visited add u to the end of Q, and add u to visited.
-<<<<<<< HEAD
+
 				if(!visited.contains(u) && u.equals(v) == false ){//&& numVerticesVisited < max){
 					
 					//System.out.println("u is: " +u);
@@ -217,7 +266,7 @@ public class WikiCrawler {
 						writer.println(v + " ");
 					//}
 					}
-=======
+
 				if(!visited.contains(edges) && edges.equals(v) == false ){//&& numVerticesVisited < max){
 					//System.out.println("u is: " +u);
 					q.add(edges);
