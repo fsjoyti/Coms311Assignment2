@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -99,7 +100,7 @@ public class WikiCrawler {
 
 		 Long startTime = System.currentTimeMillis()/1000;
 		 ArrayList<String> links = new ArrayList<String>();
-		 ArrayList<String> modified_unmarked = new ArrayList<String>();
+		 Set<String> modified_unmarked = new HashSet<>();
 		 Queue<String> q = new LinkedList<>();
 		 q .add(seedUrl);
 		 Set<String> marked = new HashSet<>();
@@ -114,7 +115,9 @@ public class WikiCrawler {
 			
 			 //System.out.println(count);
 			 String v = q.poll();
+			 System.out.println(v);
 			 modified_unmarked.add(v);
+			 if(!inedge.containsKey(v)) inedge.put(v, new LinkedList());
 			 v = v.replaceAll("^\"|\"$", "");
 			 //System.out.println(v);
 			 
@@ -123,23 +126,27 @@ public class WikiCrawler {
 			 readhtml(currentPage);
 			 links = extractLinks(htmldoc);
 			 reachable_size = links.size();
-			 System.out.println("reachable size: " +reachable_size);
+			
 			 for (int i = 0; i < reachable_size; i++){
 				 String unmarked = links.get(i);
-
+				 
 				 //writer.println(unmarked);
 				 //System.out.println("v is: " +v);
 				 unmarked = unmarked.replaceAll("^\"|\"$", "");
 				 if (!marked.contains(unmarked) && unmarked.equals(v) == false){
+					 System.out.println(v + "" +unmarked);
+					 inedge.get(v).add(unmarked);
+					 
 					 if (count <= max){
-					 modified_unmarked.add(unmarked);
+					
 					 q.add(unmarked);
 					 count++;
 					
 					 
 					 marked.add(unmarked);
-					
-				     System.out.println(v + "" +unmarked);
+					 //System.out.println(v + "" +unmarked);
+					// System.out.println(v + "" +unmarked);
+					 //System.out.println(v + "" +unmarked);
 				     writer.println(v + " "  +unmarked);
 					 }
 				 }
@@ -149,6 +156,7 @@ public class WikiCrawler {
 			 count_vertices = 0;
 		 }
 		 System.out.println("Count is: "+count);
+		 System.out.println(Arrays.asList(inedge));
 		 System.out.println("Vertices count: " +count_vertices);
 		 writer.close();
 		 //System.out.println("The marked hashSet size is: " +marked.size());
