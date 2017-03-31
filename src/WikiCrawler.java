@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -34,7 +35,7 @@ public class WikiCrawler {
 	String new_doc = "";
 	String htmldoc = "htmldoc.txt";
 	
-	LinkedHashMap<String, HashSet<String>> map = new LinkedHashMap<String, HashSet<String>>();
+	LinkedHashMap<String, LinkedHashSet<String>> map = new LinkedHashMap<String, LinkedHashSet<String>>();
 	
 	//List<String> srcNeighbours = (List<String>) edges.keySet();
 	/**
@@ -122,7 +123,7 @@ public class WikiCrawler {
 			 modified_unmarked.add(v);
 			 v = v.replaceAll("^\"|\"$", "");
 			
-			 if(!map.containsKey(v)) map.put(v,new  HashSet<String>());
+			 if(!map.containsKey(v)) map.put(v,new  LinkedHashSet<String>());
 			 //System.out.println(v);
 			 
 			 String currentPage = BASE_URL+v;
