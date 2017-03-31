@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -120,18 +121,22 @@ public class WikiCrawler {
 	 * @throws IOException, 
 	 * 
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void crawl() throws IOException,MalformedURLException  {
 
 		 PrintWriter writer = new PrintWriter("my_edges.txt", "UTF-8");
 		 writer.println(max);
 
 		// writer = new PrintWriter(this.fileName, "UTF-8");
-
+		 
 		 Long startTime = System.currentTimeMillis()/1000;
 		 ArrayList<String> links = new ArrayList<String>();
-		 Set<String> modified_unmarked =  new HashSet<>();
+		 
+		 //HashMap<String> universal_edgeSet =  new HashSet<>();
 		 
 		//Initialize a Queue Q and a list visited.
+
+
 		 Queue<String> q = new LinkedList<>();
 		 
 		// Place seed url in Q and visited.
@@ -141,7 +146,6 @@ public class WikiCrawler {
 		
 		 ArrayList<String> testList = new ArrayList<String>();
 
-		 
 		 marked.add(seedUrl);
 		
 		 int reachable_size = 0;
@@ -155,7 +159,10 @@ public class WikiCrawler {
 			 
 			 //Let currentPage be the first element of Q.
 			 String v = q.poll();
-			 modified_unmarked.add(v);
+			 System.out.println(v);
+			// modified_unmarked1.add(v);
+		   if(!inedge.containsKey(v)) inedge.put(v, new LinkedList());
+			 
 			 v = v.replaceAll("^\"|\"$", "");
 			 //System.out.println(v);
 			 
@@ -165,29 +172,42 @@ public class WikiCrawler {
 			 links = extractLinks(htmldoc);
 			 
 			 reachable_size = links.size();
-			 System.out.println("reachable size: " +reachable_size);
+			
 			 for (int i = 0; i < reachable_size; i++){
 				 
 				 String unmarked = links.get(i);
+				 
 				 //writer.println(unmarked);
 				 //System.out.println("v is: " +v);
 				 unmarked = unmarked.replaceAll("^\"|\"$", "");
-				 
-				 if (!marked.contains(unmarked) && unmarked.equals(v) == false){// && count_vertices <= max){
-					 
-					 writer.println(v + " "  +unmarked);
-					 count_vertices++;
-					 
-					 if (count <= max){
-						 
-					 modified_unmarked.add(unmarked);
-					 q.add(unmarked);
-					 count++;
-					 
+				 //universal_edgeSet.add(unmarked);
+				 //System.out.println(universal_edgeSet);
+				
+				 if (!marked.contains(unmarked) && unmarked.equals(v) == false){
+	
+					 //System.out.println(v + "" +unmarked);
 					 marked.add(unmarked);
+					 
+				    //inedge.get(v).add(unmarked);
+						 
 					
-				     //System.out.println(v + "" +unmarked);
-				     //writer.println(v + " "  +unmarked);
+					 
+					//writer.println(v + " "  +unmarked);
+					 if (count <= max){
+					   testList.add(unmarked);
+					   inedge.get(v).add(unmarked);
+					   //if(inedge.)
+					   q.add(unmarked);
+					   System.out.println("queue is: "+q.peek());
+					   count++;
+					 
+					 //marked.add(unmarked);
+
+					
+					 //System.out.println(v + "" +unmarked);
+					// System.out.println(v + "" +unmarked);
+					 //System.out.println(v + "" +unmarked);
+				    // writer.println(v + " "  +unmarked);
 					 }
 				 }
 				 count_vertices = 0;
@@ -195,15 +215,39 @@ public class WikiCrawler {
 			// count++;
 			 //count_vertices = 0;
 		 }
-		 System.out.println("Count is: "+count);
-		 System.out.println("Vertices count: " +count_vertices);
-		 System.out.println("marked is: " +marked);
+		 List<ArrayList<String>> allSignificantEdges = new ArrayList<ArrayList<String>>();
+		 ArrayList<String> getEdges = new ArrayList<String>();
+ 		 for(int i = 0; i<links.size(); i++){
+			 for(int j = 0; j<testList.size(); j++){
+
+				 if(links.get(i).equals(testList.get(j))){
+					getEdges.add(testList.get(i)); 
+					allSignificantEdges.add(getEdges);
+				 }
+			 }
+		 }
+ 		 
+ 		// System.out.println("Edges are: "+Arrays.asList(allSignificantEdges));
+ 		 for(int i = 0; i <allSignificantEdges.size(); i++){
+ 			 for(int j = 0; j<allSignificantEdges.get(i).size(); j++){
+ 				System.out.println("Edges are: " +allSignificantEdges.get(i).get(j));
+ 			 }
+ 			 
+ 			// for(int j = 0; j <)
+ 			 
+ 		 }
+		 //System.out.println(Arrays.asList(inedge));
+		 //System.out.println("Vertices count: " +count_vertices);
+		// System.out.println("marked is: " +marked);
 		
 		 writer.close();
 		 //System.out.println("The marked hashSet size is: " +marked.size());
 		// Long endTime = System.currentTimeMillis()/1000;
 		// System.out.println("Total time: " +(endTime - startTime)) ;
-		// System.out.println(marked);
+
+		 // System.out.println(marked);
+		// System.out.println(Arrays.asList(testList));
+		 System.out.println("Size of list: " +testList.size());
 	}
 
 	/*public void crawl() throws IOException,MalformedURLException  {
@@ -240,11 +284,11 @@ public class WikiCrawler {
 			links = extractLinks(htmldoc);
 			//For every link u that appears in currentPage
 			//numVerticesVisited = 1;
-			//for(String u  : links){
-			for (int i = 0; i <= max; i++){
+			for(String u  : links){
+			//for (int i = 0; i <= max; i++){
 				System.out.println("getting links");
-				edges = links.get(i);
-				//u = u.replaceAll("^\"|\"$", "");
+				//edges = links.get(i);
+				u = u.replaceAll("^\"|\"$", "");
 				edges = edges.replaceAll("^\"|\"$", "");
 				//Counter to keep track of total number of pages visited
 				
@@ -263,16 +307,17 @@ public class WikiCrawler {
 					//	String firstStrings = u;
 						////System.out.println("firstStrings:"+u);
 						//System.out.println(firstStrings);
-						writer.println(v + " ");
-					//}
+						writer.println(v + " " +edges);
+					 }
+				}
 					}
 
-				if(!visited.contains(edges) && edges.equals(v) == false ){//&& numVerticesVisited < max){
+			/*	if(!visited.contains(edges) && edges.equals(v) == false ){//&& numVerticesVisited < max){
 					//System.out.println("u is: " +u);
 					q.add(edges);
 					visited.add(edges);
 					numVerticesVisited ++;
-					writer.println(v + " "  +edges);
+					writer.println(v + " "  +edges);*/
 				/*	if(numVerticesVisited <= max){
 						//String firstStrings = u;
 						//writer.println(v + " "  +firstStrings);
@@ -307,9 +352,8 @@ public class WikiCrawler {
 		//	System.out.println("visited list: " +visited.get(i));
 			System.out.println("max visited pages: " +maxtoVisit.get(i));
 		}*/
-		
+			
 	
-
 	/**
 	 * gets the HTML tag passed in and writes to a file
 	 * @param currentPage
