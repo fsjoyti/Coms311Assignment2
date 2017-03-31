@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -33,7 +34,7 @@ public class WikiCrawler {
 	String new_doc = "";
 	String htmldoc = "htmldoc.txt";
 	
-	HashMap<String, HashSet<String>> map = new HashMap<String, HashSet<String>>();
+	LinkedHashMap<String, HashSet<String>> map = new LinkedHashMap<String, HashSet<String>>();
 	
 	//List<String> srcNeighbours = (List<String>) edges.keySet();
 	/**
@@ -365,8 +366,7 @@ public class WikiCrawler {
 		String modified_doc = "";
 		StringBuilder sb=new StringBuilder();  
 		FileReader file = new FileReader(doc);
-		String to_Return = "";
-		int indexofP = 0;
+		
 		try (BufferedReader br = new BufferedReader(file)) {
 
 			String line;
