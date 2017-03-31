@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -129,15 +130,18 @@ public class WikiCrawler {
 			
 			 for (int i = 0; i < reachable_size; i++){
 				 String unmarked = links.get(i);
-				 
+				 inedge.get(v).add(unmarked);
+					
 				 //writer.println(unmarked);
 				 //System.out.println("v is: " +v);
 				 unmarked = unmarked.replaceAll("^\"|\"$", "");
 				 if (!marked.contains(unmarked) && unmarked.equals(v) == false){
-					 System.out.println(v + "" +unmarked);
-					 inedge.get(v).add(unmarked);
+					 //System.out.println(v + "" +unmarked);
+					 writer.println(v + " "  +unmarked);
+					 //inedge.get(v).add(unmarked);
 					 
 					 if (count <= max){
+						 inedge.get(v).add(unmarked);
 					
 					 q.add(unmarked);
 					 count++;
@@ -147,7 +151,7 @@ public class WikiCrawler {
 					 //System.out.println(v + "" +unmarked);
 					// System.out.println(v + "" +unmarked);
 					 //System.out.println(v + "" +unmarked);
-				     writer.println(v + " "  +unmarked);
+				     //writer.println(v + " "  +unmarked);
 					 }
 				 }
 				
@@ -157,6 +161,29 @@ public class WikiCrawler {
 		 }
 		 System.out.println("Count is: "+count);
 		 System.out.println(Arrays.asList(inedge));
+		 
+		 for (String key : inedge.keySet()) {
+		        // gets the value
+
+		        List<String> value = inedge.get(key);
+		       
+
+		        // checks for null value
+		        if (value != null) {
+		        	ListIterator<String> listIterator = value.listIterator();
+
+		            // iterates over String elements of value
+		        while	(listIterator.hasNext() ){
+		                // checks for null
+		        	String element = listIterator.next();
+		        	if ( modified_unmarked.contains(element)==false){
+		        		listIterator.remove();
+		        		
+		        	}
+		            }
+		        }
+		    }
+		 System.out.println("2:"+Arrays.asList(inedge));
 		 System.out.println("Vertices count: " +count_vertices);
 		 writer.close();
 		 //System.out.println("The marked hashSet size is: " +marked.size());
@@ -208,7 +235,7 @@ public class WikiCrawler {
 				//Counter to keep track of total number of pages visited
 				
 				//If u /∈ visited add u to the end of Q, and add u to visited.
-<<<<<<< HEAD
+
 				if(!visited.contains(u) && u.equals(v) == false ){//&& numVerticesVisited < max){
 					
 					//System.out.println("u is: " +u);
@@ -225,7 +252,7 @@ public class WikiCrawler {
 						writer.println(v + " ");
 					//}
 					}
-=======
+
 				if(!visited.contains(edges) && edges.equals(v) == false ){//&& numVerticesVisited < max){
 					//System.out.println("u is: " +u);
 					q.add(edges);
@@ -312,27 +339,30 @@ public class WikiCrawler {
 	private String after_p(String doc) throws IOException {
 
 		String modified_doc = "";
-
+		StringBuilder sb=new StringBuilder();  
 		FileReader file = new FileReader(doc);
-
+		String to_Return = "";
+		int indexofP = 0;
 		try (BufferedReader br = new BufferedReader(file)) {
 
 			String line;
-
-			while ((line = br.readLine()) != null) {
-
+			int count = 1;
+			boolean afterbody = false;
+			while ((line = br.readLine()) != null ) {
+				//System.out.println(line);
+				
+			
+				
 				modified_doc += line;
-
+				
 			}
-
+            
 		}
-		try{
-			modified_doc = modified_doc.substring(modified_doc.lastIndexOf("<p>") + 3); // Ignore
-		}
-		catch (Exception e){
-			System.out.println("No p tags exist");
-		}
-       																		// <P>
+	
+		
+		  
+		modified_doc = modified_doc.substring(modified_doc.indexOf("<p>") );  
+       																// <P>
 
 		return modified_doc;
 	}
