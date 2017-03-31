@@ -86,7 +86,7 @@ public class GraphProcessor {
 		 * @return
 		 */
 		public int numComponents(){
-			return 0;
+			return numComponents;
 			
 		}
 		
@@ -102,6 +102,7 @@ public class GraphProcessor {
 		 * Returns the BFS path from u to v
 		 */
 		public ArrayList<String> bfsPath(String u, String v){
+			
 			return null;
 			
 		}
