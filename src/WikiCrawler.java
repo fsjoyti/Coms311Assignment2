@@ -28,11 +28,12 @@ public class WikiCrawler {
     String BASE_URL = "https://en.wikipedia.org";
 	String seedUrl;
 	int max;
-	int count = 0;
+	int count = 1;
 	String fileName;
 	String new_doc = "";
 	String htmldoc = "htmldoc.txt";
-	Map<String, List<String>> inedge = new HashMap<String, List<String>>();
+	
+	HashMap<String, HashSet<String>> map = new HashMap<String, HashSet<String>>();
 	
 	//List<String> srcNeighbours = (List<String>) edges.keySet();
 	/**
@@ -112,14 +113,15 @@ public class WikiCrawler {
 		 int reachable_size = 0;
 		 int count_vertices = 0;
 		 
-		 while(!q.isEmpty()){
+		 while(!q.isEmpty() && count <=max){
 			
 			 //System.out.println(count);
 			 String v = q.poll();
-			 System.out.println(v);
+			
 			 modified_unmarked.add(v);
-			 if(!inedge.containsKey(v)) inedge.put(v, new LinkedList());
 			 v = v.replaceAll("^\"|\"$", "");
+			
+			 if(!map.containsKey(v)) map.put(v,new  HashSet<String>());
 			 //System.out.println(v);
 			 
 			 String currentPage = BASE_URL+v;
@@ -130,21 +132,26 @@ public class WikiCrawler {
 			
 			 for (int i = 0; i < reachable_size; i++){
 				 String unmarked = links.get(i);
-				 inedge.get(v).add(unmarked);
+				 unmarked = unmarked.replaceAll("^\"|\"$", "");
+				
+				 
+				 
+				
+				 if (unmarked.equals(v) == false)
+					 map.get(v).add(unmarked);
 					
 				 //writer.println(unmarked);
 				 //System.out.println("v is: " +v);
-				 unmarked = unmarked.replaceAll("^\"|\"$", "");
+				
 				 if (!marked.contains(unmarked) && unmarked.equals(v) == false){
 					 //System.out.println(v + "" +unmarked);
-					 writer.println(v + " "  +unmarked);
+					 
 					 //inedge.get(v).add(unmarked);
 					 
-					 if (count <= max){
-						 inedge.get(v).add(unmarked);
-					
+				//	 if (count <= max){
+						
 					 q.add(unmarked);
-					 count++;
+					
 					
 					 
 					 marked.add(unmarked);
@@ -153,42 +160,59 @@ public class WikiCrawler {
 					 //System.out.println(v + "" +unmarked);
 				     //writer.println(v + " "  +unmarked);
 					 }
-				 }
+				 //}
 				
 			 }
-			
+			count++;
 			 count_vertices = 0;
 		 }
-		 System.out.println("Count is: "+count);
-		 System.out.println(Arrays.asList(inedge));
+		
+		
 		 
-		 for (String key : inedge.keySet()) {
-		        // gets the value
-
-		        List<String> value = inedge.get(key);
-		       
-
-		        // checks for null value
-		        if (value != null) {
-		        	ListIterator<String> listIterator = value.listIterator();
-
-		            // iterates over String elements of value
-		        while	(listIterator.hasNext() ){
-		                // checks for null
-		        	String element = listIterator.next();
-		        	if ( modified_unmarked.contains(element)==false){
-		        		listIterator.remove();
-		        		
-		        	}
-		            }
-		        }
-		    }
-		 System.out.println("2:"+Arrays.asList(inedge));
-		 System.out.println("Vertices count: " +count_vertices);
+		 
+		 
+		 for (String key : map.keySet()) {
+			 
+			 HashSet <String> set = map.get(key);
+			 if (set !=null){
+				 Iterator<String> iterator = set.iterator();
+				 while (iterator.hasNext()){
+					 String element = iterator.next();
+					 if ( modified_unmarked.contains(element)==false){
+						 iterator.remove();
+						 
+					 }
+					 
+				 }
+				 
+			 }
+			 
+			 
+		 }
+		 
+		 for (String key : map.keySet()){
+			 HashSet <String> set = map.get(key);
+			 if (set !=null){
+				 Iterator<String> iterator = set.iterator();
+				 while (iterator.hasNext()){
+					 String element = iterator.next();
+					 
+					 writer.println(key + " "  +element);
+					 
+				 }
+				 
+			 }
+			 
+			 
+		 }
+		 
+		
+		
+		 
 		 writer.close();
 		 //System.out.println("The marked hashSet size is: " +marked.size());
-		// Long endTime = System.currentTimeMillis()/1000;
-		// System.out.println("Total time: " +(endTime - startTime)) ;
+		 Long endTime = System.currentTimeMillis()/1000;
+		System.out.println("Total time: " +(endTime - startTime)) ;
 		// System.out.println(marked);
 	}
 	/*
@@ -346,8 +370,8 @@ public class WikiCrawler {
 		try (BufferedReader br = new BufferedReader(file)) {
 
 			String line;
-			int count = 1;
-			boolean afterbody = false;
+			
+			
 			while ((line = br.readLine()) != null ) {
 				//System.out.println(line);
 				
