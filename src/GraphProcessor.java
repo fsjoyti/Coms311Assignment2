@@ -6,8 +6,9 @@ import java.util.*;
 public class GraphProcessor {
 
 	LinkedHashMap<String, LinkedHashSet<String>> adjacency_list = new LinkedHashMap<String, LinkedHashSet<String>>();
-	ArrayList<String> dfsOutput;
+	
 	Map<String, Integer> myMap = new HashMap<String, Integer>();
+	 HashSet<String> visited = new HashSet<>();
 	int numVertices;
 	int count = 1;
 	String[] vertices;
@@ -48,7 +49,7 @@ public class GraphProcessor {
 			outDegree = set.size();
 		}
 		//getReversedGraph(adjacency_list);
-		DFSAlgo(adjacency_list,0);
+		DFS(adjacency_list,v);
 		return outDegree;
 
 	}
@@ -102,34 +103,35 @@ public class GraphProcessor {
 	}
 	
 	private void DFSAlgo(LinkedHashMap<String, LinkedHashSet<String>> graph,int n){
-		dfsOutput = new ArrayList<String>();
+		
 		//Unmark every vertex
 		boolean[] visited = new boolean[numVertices];
 		//int[] parent = new int[numVertices];
 		//int[] DFSNum = new int[numVertices];
 		
-		DFS(adjacency_list, visited, vertices[n]);		
+		//DFS(adjacency_list, visited, vertices[n]);		
 		
 		
 	}
 	
-	private void DFS(LinkedHashMap<String, LinkedHashSet<String>> graph, boolean visited[], String v){
+	private void DFS(LinkedHashMap<String, LinkedHashSet<String>> graph,  String v){
+		visited.add(v);
+		System.out.print(v);
+		LinkedHashSet<String> set = graph.get(v);
 		
-		int counter = 0;
-		visited[counter] = true;
-		System.out.println(v + " ");
-		
-		
-		int newCounter = 0;
-		for(String w : graph.get(vertices[newCounter])){
-			
-			if(!visited[newCounter]){
-				DFS(adjacency_list, visited, w);
+		if (set!=null){
+			Iterator<String> iterator = set.iterator();
+			while(iterator.hasNext()){
+				 String neighbor = iterator.next();
+				 if (!visited.contains(neighbor)){
+					 DFS(graph,neighbor);
+				 }
+				 
 			}
-			System.out.println("dfs visited: " +dfsOutput.add(vertices[newCounter]));
-			newCounter++;
+			
+			
 		}
-		counter++;
+		
 	}
 	
 	
