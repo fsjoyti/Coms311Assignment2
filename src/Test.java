@@ -13,8 +13,8 @@ public class Test {
 		//System.out.println("Done");
 		//w.extractLinks("sample.txt");
 		//System.out.println(w.map());
-		GraphProcessor g = new GraphProcessor("dfs_test.txt");
-		System.out.println("OutDegree is: " +g.outDegree("A"));
+		GraphProcessor g = new GraphProcessor("testDoc.txt");
+		System.out.println("OutDegree is: " +g.outDegree("B"));
 		//System.out.println(g.outDegree("/wiki/Complexity_theory"));
 		//LinkedHashMap<String, LinkedHashSet<String>> newMap = 
 		//System.out.println("Reversed List: " +g.("Chicago"));
