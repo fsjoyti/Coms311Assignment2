@@ -15,7 +15,8 @@ public class GraphProcessor {
 	// String[] vertices;
 	HashSet<String> visited_ordered = new HashSet<>();// for compute order and
 														// finish dfs
-
+	ArrayList<String> finishTimeList = new ArrayList<String>();
+	
 	public GraphProcessor(String graphData) throws FileNotFoundException {
 
 		int verticesCounter = 0;
@@ -108,7 +109,10 @@ public class GraphProcessor {
 		// Check for null condition (If there are no edges from this vertex, check for the next vertex with an edge)
 		while(set == null) {
 			visited_ordered.add(currVertex); //Maybe?
+			//Add to hashmap to compute finish time
 			FinishTime.put(currVertex, counter);
+			//Add to the array List
+			finishTimeList.add(currVertex);
 			Iterator<String> iterator = allVertices.iterator();
 			currVertex = iterator.next();
 			set = revGraph.get(currVertex);
@@ -130,7 +134,7 @@ public class GraphProcessor {
 		//int[] finishTime = new int[numVertices];
 
 		visited_ordered.add(v);
-		//System.out.println("v in FinishDFS is: " + v);
+		System.out.println("v in FinishDFS is: " + v);
 		
 		//System.out.println("Set is: " + set);
 		
@@ -140,19 +144,30 @@ public class GraphProcessor {
 		LinkedHashSet<String> set = graph.get(v);
 
 		Iterator<String> iterator = set.iterator();
-		String currVertex = v;
+		
+		System.out.println("Iterator contains:  " +set);
+		
+		while(iterator.hasNext()){
+			DFS(graph, iterator.next());
+		}
+		/*String currVertex = v;
 		while (iterator.hasNext()) {
 			String nextVertex = iterator.next();
-			if(!visited_ordered.contains(nextVertex)){
+			if(!visited_ordered.contains(nextVertex) ){
 				DFS(graph, currVertex);
 				currVertex = nextVertex;
 			}
 			//System.out.println("next Vertex is " +nextVertex);
 			counter++;
+			//Add to map to compute finish time
 			FinishTime.put(currVertex, counter);
+			//Add to list
+			finishTimeList.add(currVertex);
 		}
-		
+		//Add to list
+		//finishTimeList.add(currVertex);
 		System.out.println("Finish time is: " +Arrays.asList(FinishTime));
+		System.out.println("Finish time list: " +finishTimeList);*/
 	}
 
 	private void DFS(LinkedHashMap<String, LinkedHashSet<String>> graph, String v) {
