@@ -270,7 +270,6 @@
 /wiki/Complexity /wiki/Main_Page
 /wiki/Systems_theory /wiki/Systems_science
 /wiki/Systems_theory /wiki/System
-/wiki/Systems_theory /wiki/Feedback
 /wiki/Systems_theory /wiki/Physics
 /wiki/Systems_theory /wiki/Economics
 /wiki/Systems_theory /wiki/Emergence
@@ -284,6 +283,7 @@
 /wiki/Systems_theory /wiki/Complex_adaptive_system
 /wiki/Systems_theory /wiki/Complexity
 /wiki/Systems_theory /wiki/Social_system
+/wiki/Systems_theory /wiki/Feedback
 /wiki/Systems_theory /wiki/Santa_Fe_Institute
 /wiki/Systems_theory /wiki/Dynamical_systems
 /wiki/Systems_theory /wiki/International_Standard_Book_Number
@@ -486,7 +486,6 @@
 /wiki/Dynamical_systems /wiki/Santa_Fe_Institute
 /wiki/Dynamical_systems /wiki/Dynamical_system
 /wiki/Dynamical_systems /wiki/Main_Page
-/wiki/Nonlinearity /wiki/Linear_systems
 /wiki/Nonlinearity /wiki/Mathematics
 /wiki/Nonlinearity /wiki/Chaos_theory
 /wiki/Nonlinearity /wiki/Superposition_principle
