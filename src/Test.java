@@ -19,7 +19,7 @@ public class Test {
 		//LinkedHashMap<String, LinkedHashSet<String>> newMap = 
 		//System.out.println("Reversed List: " +g.("Chicago"));
 
-
+		g.stronglyConnectedComponents();
 	}
 
 }

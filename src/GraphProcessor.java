@@ -7,7 +7,7 @@ public class GraphProcessor {
 
 	LinkedHashMap<String, LinkedHashSet<String>> adjacency_list = new LinkedHashMap<String, LinkedHashSet<String>>();
 
-	Map<String, Integer> FinishTime = new HashMap<String, Integer>();
+	Map<String, Integer> FinishTime = new TreeMap<String, Integer>();
 	HashSet<String> visited = new HashSet<>();
 	int numVertices;
 	int count = 1;
@@ -18,6 +18,7 @@ public class GraphProcessor {
 	ArrayList<String> finishTimeList = new ArrayList<String>();
 	
 	//ArrayList<String> allVertices = new ArrayList<String>();
+	//String[] sortedList;
 	
 	public GraphProcessor(String graphData) throws FileNotFoundException {
 
@@ -88,9 +89,40 @@ public class GraphProcessor {
 
 	}
 
-	private void stronglyConnectedComponents() {
-		Deque<String> stack = new ArrayDeque<>();
+	public void stronglyConnectedComponents() { //TODO make private
+		
+		//String[] sortedList = new String[numVertices];
+		
+		//List list = new ArrayList(FinishTime.entrySet());
+		
+		List<Integer> mapValues = new ArrayList<Integer>(FinishTime.values());
+		List<String> mapKeys = new ArrayList<String>(FinishTime.keySet());
+		Collections.sort(mapValues);
+		Collections.sort(mapKeys);
+		
+		LinkedHashMap<String, Integer> sortedMap =
+		        new LinkedHashMap<>();
 
+		    Iterator<Integer> valueIt = mapValues.iterator();
+		    while (valueIt.hasNext()) {
+		        int val = valueIt.next();
+		        Iterator<String> keyIt = mapKeys.iterator();
+
+		        while (keyIt.hasNext()) {
+		            String key = keyIt.next();
+		            int comp1 = FinishTime.get(key);
+		            int comp2 = val;
+
+		            if (comp1 == comp2) {
+		                keyIt.remove();
+		                sortedMap.put(key, val);
+		                break;
+		            }
+		        }
+		    }
+		   // return sortedMap;
+		    System.out.println(Arrays.asList(sortedMap));
+		
 	}
 
 	private void computeOrder(LinkedHashMap<String, LinkedHashSet<String>> Graph) {
@@ -101,10 +133,6 @@ public class GraphProcessor {
 
 		// keep counter
 		counter = 0;
-		
-		//String currVertex = v; //The v that we will pass in into finishDFS
-		//visited_ordered.add(v);
-		//LinkedHashSet<String> set = revGraph.get(v);
 
 		ArrayList<String> allVertices = new ArrayList<String>();
 		// Store all keys into arrayList
@@ -119,40 +147,14 @@ public class GraphProcessor {
 			}
 		}
 		System.out.println(FinishTime);
-		
-		// Check for null condition (If there are no edges from this vertex, check for the next vertex with an edge)
-		
-		/*while(set == null) {
-			visited_ordered.add(currVertex); //Maybe?
-			//Add to hashmap to compute finish time
-			FinishTime.put(currVertex, counter);
-			//Add to the array List
-			finishTimeList.add(currVertex);
-			Iterator<String> iterator = allVertices.iterator();
-			currVertex = iterator.next();
-			set = revGraph.get(currVertex);
-			counter++;
-		}*/
-		//System.out.println("curr vertex is " +currVertex);
-		// System.out.println("Set is: " +set);
-		//System.out.println("visited ordered array: " +(visited_ordered));
-		/*
-		if(!visited_ordered.contains(currVertex)){
-			
-			FinishDFS(revGraph, currVertex);
-			//System.out.println("Call finish DFS");
-		}
-		
-		
-	*/	
+	
 
 	}
 	
 
 	private void FinishDFS(LinkedHashMap<String, LinkedHashSet<String>> graph, String v) {
 
-		//int[] finishTime = new int[numVertices];
-		//mark v
+		
 		visited_ordered.add(v);
 		System.out.println("v in FinishDFS is: " + v);
 		
@@ -171,68 +173,17 @@ public class GraphProcessor {
 			}
 			
 		}
-		//counter++;
-		//FinishTime.put(v, counter);
 		
-		/*
-		for(String u : allVertices){
-			
-			if(!visited_ordered.contains(u))
-			{
-				if(set.contains(u)){
-					DFS(graph, u);
-					
-					//Add to map to compute finish time
-					FinishTime.put(u, counter);
-					counter++;
-					finishTimeList.add(u);
-				}
-				
-			}
-			*/
-			
-			//finishTimeList.add(u);
 		}
-		//System.out.println("Finish time is: " +Arrays.asList(FinishTime));
-
-		//System.out.println("Finish time list: " +finishTimeList);
-		//System.out.println("Set is: " + set);
 		
-		/*if (!visited_ordered.contains(v)) {
-			visited_ordered.add(v);
-		}
-		LinkedHashSet<String> set = graph.get(v);
-
-		Iterator<String> iterator = set.iterator();
-		
-		System.out.println("Iterator contains:  " +set);
-		
-		while(iterator.hasNext()){
-			DFS(graph, iterator.next());
-		}
-		/*String currVertex = v;
-		while (iterator.hasNext()) {
-			String nextVertex = iterator.next();
-			if(!visited_ordered.contains(nextVertex) ){
-				DFS(graph, currVertex);
-				currVertex = nextVertex;
-			}
-			//System.out.println("next Vertex is " +nextVertex);
-			counter++;
-			//Add to map to compute finish time
-			FinishTime.put(currVertex, counter);
-			//Add to list
-			finishTimeList.add(currVertex);
-		}
-		//Add to list
-		//finishTimeList.add(currVertex);
-		System.out.println("Finish time is: " +Arrays.asList(FinishTime));
-		System.out.println("Finish time list: " +finishTimeList);*/
-	
 
 
 	private void DFS(LinkedHashMap<String, LinkedHashSet<String>> graph, String v) {
-	
+		//sortedList = new String[numVertices];
+		ArrayList<String> sortedList = new ArrayList<String>();
+		/*for(int i = 0; i<sortedList.length; i++){
+			sortedList[i] = "";
+		}*/
 		visited.add(v);
 		//counter++;
 		//System.out.print("DFS order is: " + v);
@@ -251,8 +202,11 @@ public class GraphProcessor {
 			}
 			
 
-		}counter++;
+		}
+		
+		counter++;
 		FinishTime.put(v, counter);
+		
 		
 	}
 
