@@ -11,7 +11,7 @@ public class GraphProcessor {
 	HashSet<String> visited = new HashSet<>();
 	int numVertices;
 	int count = 1;
-	int counter = 0; // used in compute order & finish dfs
+	int counter; // used in compute order & finish dfs
 	// String[] vertices;
 	HashSet<String> visited_ordered = new HashSet<>();// for compute order and
 														// finish dfs
@@ -58,7 +58,7 @@ public class GraphProcessor {
 
 		// System.out.println("V is : " +v);
 
-		computeOrder(adjacency_list, v);
+		computeOrder(adjacency_list);
 		System.out.println();
 		return outDegree;
 
@@ -93,33 +93,36 @@ public class GraphProcessor {
 
 	}
 
-	private void computeOrder(LinkedHashMap<String, LinkedHashSet<String>> Graph, String v) {
-
+	private void computeOrder(LinkedHashMap<String, LinkedHashSet<String>> Graph) {
+		
+		visited_ordered.clear();
 		// Compute the reversed adjacency list
 		LinkedHashMap<String, LinkedHashSet<String>> revGraph = getReversedGraph(Graph);
 
 		// keep counter
-		//counter = 0;
+		counter = 0;
 		
-		String currVertex = v; //The v that we will pass in into finishDFS
+		//String currVertex = v; //The v that we will pass in into finishDFS
 		//visited_ordered.add(v);
-		LinkedHashSet<String> set = revGraph.get(v);
+		//LinkedHashSet<String> set = revGraph.get(v);
 
 		ArrayList<String> allVertices = new ArrayList<String>();
 		// Store all keys into arrayList
 		allVertices.addAll(revGraph.keySet());
-		/*for (String key : revGraph.keySet()){
-			System.out.println("key: "+key);
+		for (String key : Graph.keySet()){
+			System.out.print("key "+key);
+			
 			if (!visited.contains(key)){
-				DFS(revGraph,key);
+				//DFS(revGraph,key);
+				DFS(Graph, key);
 				
 			}
 		}
-		System.out.println(FinishTime);*/
+		System.out.println(FinishTime);
 		
 		// Check for null condition (If there are no edges from this vertex, check for the next vertex with an edge)
 		
-		while(set == null) {
+		/*while(set == null) {
 			visited_ordered.add(currVertex); //Maybe?
 			//Add to hashmap to compute finish time
 			FinishTime.put(currVertex, counter);
@@ -129,10 +132,11 @@ public class GraphProcessor {
 			currVertex = iterator.next();
 			set = revGraph.get(currVertex);
 			counter++;
-		}
+		}*/
 		//System.out.println("curr vertex is " +currVertex);
 		// System.out.println("Set is: " +set);
 		//System.out.println("visited ordered array: " +(visited_ordered));
+		/*
 		if(!visited_ordered.contains(currVertex)){
 			
 			FinishDFS(revGraph, currVertex);
@@ -140,9 +144,10 @@ public class GraphProcessor {
 		}
 		
 		
-		
+	*/	
 
 	}
+	
 
 	private void FinishDFS(LinkedHashMap<String, LinkedHashSet<String>> graph, String v) {
 
@@ -157,7 +162,19 @@ public class GraphProcessor {
 		
 		LinkedHashSet<String> set = graph.get(v);
 		System.out.println("Set contains: " +set);
+		Iterator<String> iterator = set.iterator();
+		while(iterator.hasNext()){
+			String nextVertex = iterator.next();
+			if(!visited_ordered.contains(nextVertex) ){
+				DFS(graph,nextVertex);
+				
+			}
+			
+		}
+		//counter++;
+		//FinishTime.put(v, counter);
 		
+		/*
 		for(String u : allVertices){
 			
 			if(!visited_ordered.contains(u))
@@ -170,18 +187,15 @@ public class GraphProcessor {
 					counter++;
 					finishTimeList.add(u);
 				}
-				else{
-					finishTimeList.add(u);
-				}
 				
 			}
-			
+			*/
 			
 			//finishTimeList.add(u);
 		}
-		System.out.println("Finish time is: " +Arrays.asList(FinishTime));
+		//System.out.println("Finish time is: " +Arrays.asList(FinishTime));
 
-		System.out.println("Finish time list: " +finishTimeList);
+		//System.out.println("Finish time list: " +finishTimeList);
 		//System.out.println("Set is: " + set);
 		
 		/*if (!visited_ordered.contains(v)) {
@@ -214,12 +228,13 @@ public class GraphProcessor {
 		//finishTimeList.add(currVertex);
 		System.out.println("Finish time is: " +Arrays.asList(FinishTime));
 		System.out.println("Finish time list: " +finishTimeList);*/
-	}
+	
 
 
 	private void DFS(LinkedHashMap<String, LinkedHashSet<String>> graph, String v) {
 	
 		visited.add(v);
+		//counter++;
 		//System.out.print("DFS order is: " + v);
 		LinkedHashSet<String> set = graph.get(v);
 
@@ -232,12 +247,13 @@ public class GraphProcessor {
 					DFS(graph, neighbor);
 				}
 
+				
 			}
+			
 
-		}
-		counter++;
+		}counter++;
 		FinishTime.put(v, counter);
-
+		
 	}
 
 	/**
