@@ -146,7 +146,7 @@ public class GraphProcessor {
 			}
 			//System.out.println("next Vertex is " +nextVertex);
 			counter++;
-			finishTime[]
+			myMap.put(nextVertex, counter);
 		}
 		
 		
