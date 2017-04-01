@@ -13,7 +13,7 @@ public class GraphProcessor {
 	int count = 1;
 	int counter = 0; //used in compute order & finish dfs
 	//String[] vertices;
-	
+	HashSet<String> visited_ordered = new HashSet<>();//for compute order and finish dfs
 	public GraphProcessor(String graphData) throws FileNotFoundException {
 
 		int verticesCounter = 0;
@@ -50,11 +50,11 @@ public class GraphProcessor {
 			outDegree = set.size();
 		}
 		//getReversedGraph(adjacency_list);
-		//DFS(adjacency_list,v);
+		DFS(adjacency_list,v);
 		
 	    //System.out.println("V is : " +v);
 		
-		computeOrder(adjacency_list, "B");
+		computeOrder(adjacency_list, v);
 		System.out.println();
 		return outDegree;
 
@@ -97,6 +97,7 @@ public class GraphProcessor {
 		//keep counter
 		counter = 0;
 		
+		visited_ordered.add(v);
 		LinkedHashSet<String> set = revGraph.get(v);
 		
 		//Check for null condition
@@ -112,23 +113,24 @@ public class GraphProcessor {
 			while(iterator.hasNext()){
 				String neighbour = iterator.next();
 				System.out.println("Neighbour is: " +neighbour);
-				//FinishDFS(revGraph, )
+				if(!visited_ordered.contains(neighbour)){
+					visited_ordered.add(neighbour);
+					FinishDFS(revGraph, neighbour);
+				}
 			}
 		}
 		
 		
 	}
 	
-	private void DFSAlgo(LinkedHashMap<String, LinkedHashSet<String>> graph,int n){
+	private void FinishDFS(LinkedHashMap<String, LinkedHashSet<String>> graph, String v){
 		
-		//Unmark every vertex
-		boolean[] visited = new boolean[numVertices];
-		//int[] parent = new int[numVertices];
-		//int[] DFSNum = new int[numVertices];
+		int[] finishTime = new int[numVertices];
 		
-		//DFS(adjacency_list, visited, vertices[n]);		
+		System.out.println("v in FinishDFS is: " +v );
+		LinkedHashSet<String> set = graph.get(v);
 		
-		
+		System.out.println("Set is: " +set);
 	}
 	
 	private void DFS(LinkedHashMap<String, LinkedHashSet<String>> graph,  String v){
@@ -141,6 +143,7 @@ public class GraphProcessor {
 			Iterator<String> iterator = set.iterator();
 			while(iterator.hasNext()){
 				 String neighbor = iterator.next();
+				 //System.out.println("Neighbour is: " +neighbor);
 				 if (!visited.contains(neighbor)){
 					 DFS(graph,neighbor);
 				 }
