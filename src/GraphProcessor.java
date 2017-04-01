@@ -8,25 +8,26 @@ public class GraphProcessor {
 	LinkedHashMap<String, LinkedHashSet<String>> adjacency_list = new LinkedHashMap<String, LinkedHashSet<String>>();
 	
 	Map<String, Integer> myMap = new HashMap<String, Integer>();
-	 HashSet<String> visited = new HashSet<>();
+	HashSet<String> visited = new HashSet<>();
 	int numVertices;
 	int count = 1;
-	String[] vertices;
+	int counter = 0; //used in compute order & finish dfs
+	//String[] vertices;
+	
 	public GraphProcessor(String graphData) throws FileNotFoundException {
-		//vertices = new String[numVertices];
+
 		int verticesCounter = 0;
 		File f = new File(graphData);
 		Scanner input = new Scanner(f);
 		this.numVertices = (Integer.parseInt(input.next()));
-		vertices = new String[numVertices];
+		//vertices = new String[numVertices];
 		
 		while (input.hasNext()) {
 			String v = input.next();
 			String e = input.next();
 			if (!adjacency_list.containsKey(v)){
 				adjacency_list.put(v, new LinkedHashSet<String>());
-				vertices[verticesCounter] = v;
-				verticesCounter++;
+			
 			}
 				
 			adjacency_list.get(v).add(e);
@@ -49,7 +50,12 @@ public class GraphProcessor {
 			outDegree = set.size();
 		}
 		//getReversedGraph(adjacency_list);
-		DFS(adjacency_list,v);
+		//DFS(adjacency_list,v);
+		
+	    //System.out.println("V is : " +v);
+		
+		computeOrder(adjacency_list, "B");
+		System.out.println();
 		return outDegree;
 
 	}
@@ -83,21 +89,32 @@ public class GraphProcessor {
 
 	}
 
-	private void computeOrder(LinkedHashMap<String, LinkedHashSet<String>> OrigadjacencyList) {
-
+	private void computeOrder(LinkedHashMap<String, LinkedHashSet<String>> Graph, String v) {
+		
 		//Compute the reversed adjacency list
-		LinkedHashMap<String, LinkedHashSet<String>> revAdjList = getReversedGraph(OrigadjacencyList);
+		LinkedHashMap<String, LinkedHashSet<String>> revGraph = getReversedGraph(Graph);
 		
-		//Unmark every vertex v
-		int[] unmarked = new int[numVertices];
+		//keep counter
+		counter = 0;
 		
-		for(int i = 0; i<unmarked.length; i++){
-			unmarked[i] = 0;
+		LinkedHashSet<String> set = revGraph.get(v);
+		
+		//Check for null condition
+		if(set == null){
+			System.out.println("Set is null");
 		}
 		
-		//
-		int counter = 0;
-		
+		//System.out.println("Set is: " +set);
+		if(set != null){
+			
+			Iterator<String> iterator = set.iterator();
+			
+			while(iterator.hasNext()){
+				String neighbour = iterator.next();
+				System.out.println("Neighbour is: " +neighbour);
+				//FinishDFS(revGraph, )
+			}
+		}
 		
 		
 	}
@@ -115,8 +132,9 @@ public class GraphProcessor {
 	}
 	
 	private void DFS(LinkedHashMap<String, LinkedHashSet<String>> graph,  String v){
+		
 		visited.add(v);
-		System.out.print(v);
+		System.out.print("DFS order is: " +v);
 		LinkedHashSet<String> set = graph.get(v);
 		
 		if (set!=null){
