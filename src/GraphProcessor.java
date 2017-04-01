@@ -116,8 +116,9 @@ public class GraphProcessor {
 		// System.out.println("Set is: " +set);
 		//System.out.println("visited ordered array: " +(visited_ordered));
 		if(!visited_ordered.contains(currVertex)){
-			//FinishDFS(revGraph, currVertex);
-			System.out.println("Call finish DFS");
+			
+			FinishDFS(revGraph, currVertex);
+			//System.out.println("Call finish DFS");
 		}
 
 	}
@@ -126,32 +127,28 @@ public class GraphProcessor {
 
 		int[] finishTime = new int[numVertices];
 
+		visited_ordered.add(v);
 		//System.out.println("v in FinishDFS is: " + v);
-		LinkedHashSet<String> set = graph.get(v);
-
-		ArrayList<String> allVertices = new ArrayList<String>();
-		// Store all keys into arrayList
-		allVertices.addAll(graph.keySet());
-		// Check for null condition
-		while (set == null) {
-
-			Iterator<String> iterator = allVertices.iterator();
-			String nextVertex = iterator.next();
-			set = graph.get(nextVertex);
-		}
 		
 		//System.out.println("Set is: " + set);
 		
-		if (!visited_ordered.contains(v)) {
+		/*if (!visited_ordered.contains(v)) {
 			visited_ordered.add(v);
-		}
-		
+		}*/
+		LinkedHashSet<String> set = graph.get(v);
+
 		Iterator<String> iterator = set.iterator();
 
 		while (iterator.hasNext()) {
 			String nextVertex = iterator.next();
-			System.out.println("next Vertex is " +nextVertex);
+			if(!visited_ordered.contains(nextVertex)){
+				DFS(graph, nextVertex);
+			}
+			//System.out.println("next Vertex is " +nextVertex);
+			counter++;
+			finishTime[]
 		}
+		
 		
 	}
 
