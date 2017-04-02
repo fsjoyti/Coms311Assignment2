@@ -10,7 +10,11 @@ public class GraphProcessor {
 	Map<String, Integer> FinishTime = new TreeMap<String, Integer>();
 	HashSet<String> visited = new HashSet<>();
 	int numVertices;
+	//Total number of SCC's
 	int numComponents;
+	//Largest SCC
+	int largestComponent;
+	
 	int count = 1;
 	int counter; // used in compute order & finish dfs
 	int t; //[This keeps track of the number of vertices that have been fully explored
@@ -22,11 +26,18 @@ public class GraphProcessor {
 	
 	 Deque<String> result = new ArrayDeque<>();
 	 
-	// List<Set<String>> components = new ArrayList<>(); //List of SCcomponents
+	 List<Set<String>> components = new ArrayList<>(); //List of SCcomponents
 
 	// ArrayList<String> allVertices = new ArrayList<String>();
 	// String[] sortedList;
-
+	 
+	 /**
+	  * 
+	  * @param graphData
+	  * hold the absolute path of a file that stores a
+	  * directed graph
+	  * @throws FileNotFoundException
+	  */
 	public GraphProcessor(String graphData) throws FileNotFoundException {
 
 		int verticesCounter = 0;
@@ -51,7 +62,11 @@ public class GraphProcessor {
 		// System.out.println("map: " +myMap);
 		// System.out.println("My vertices Array: " +Arrays.asList(vertices));
 	}
-
+	/**
+	 * Returns the out degree of v.
+	 * @param v
+	 * @return
+	 */
 	public int outDegree(String v) {
 
 		int outDegree = 0;
@@ -67,35 +82,82 @@ public class GraphProcessor {
 		// System.out.println("V is : " +v);
 
 		computeOrder(adjacency_list);
-		stronglyConnectedComponents(adjacency_list);
+		//stronglyConnectedComponents(adjacency_list);
 		System.out.println();
 		return outDegree;
 
 	}
 
+	/**
+	 * Returns true if u and v belong to the same SCC; otherwise
+	 * returns false.
+	 * @param u
+	 * @param v
+	 * @return
+	 */
 	public boolean sameComponent(String u, String v) {
 		
 		return true;
 	}
 
+	/**
+	 * ) Return all the vertices that belong to the same Strongly Connected
+	 * Component of v (including v)
+	 * @param v
+	 * @return
+	 */
 	public ArrayList<String> componentVertices(String v) {
-		return null;
+		
+		stronglyConnectedComponents(adjacency_list);
+		
+		ArrayList<String> componentVertices = new ArrayList<String>();
+		
+		for(int i = 0; i<components.size(); i++){
+			if(components.get(i).contains(v)){
+				componentVertices =  (ArrayList<String>) components.get(i);
+			}
+		}
+		
+		return componentVertices;
 
 	}
 
-	public String largestComponent() {
-		return null;
+	/**
+	 * Returns the size of the largest component.
+	 * @return
+	 */
+	public int largestComponent() {
+		
+		stronglyConnectedComponents(adjacency_list);
+		
+		return largestComponent;
 
 	}
 
+	/**
+	 * Returns the number of strongly connect components
+	 * @return
+	 */
 	public int numComponents() {
 		
-		//numComponents = components.size();
-		System.out.println("Total number of components are: " +numComponents);
+		stronglyConnectedComponents(adjacency_list);
+		
 		return numComponents;
 
 	}
 
+	/**
+	 * This method returns an array 
+	 * list of strings that represents the BFS path from u to v.
+	 * If there is no
+	 * path from u to v, then this method returns an empty list
+	 * @param u
+	 * First vertex in the path must be u
+	 * @param v
+	 * the last vertex must be v
+	 * @return
+	 * Returns the BFS path from u to v.
+	 */
 	public ArrayList<String> bfsPath(String u, String v) {
 		return null;
 
@@ -171,11 +233,10 @@ public class GraphProcessor {
 	
 	private void stronglyConnectedComponents(LinkedHashMap<String, LinkedHashSet<String>> Graph) {
 		
-		
 		LinkedHashMap<String, LinkedHashSet<String>> revGraph = getReversedGraph(Graph);
 		computeOrder(Graph);
 		System.out.println(result);
-		List<Set<String>> components = new ArrayList<>();
+		//List<Set<String>> components = new ArrayList<>();
 		visited.clear();
 		while (!result.isEmpty()){
 			String vertice = result.poll();
@@ -189,8 +250,17 @@ public class GraphProcessor {
 			
 		}
 		numComponents = components.size();
-		System.out.println("Size of SCC: " +components.size());
+		//System.out.println("Size of SCC: " +components.size());
+		largestComponent = 0;
+		
+		for(int i = 0; i<components.size(); i++){
+			if(components.get(i).size() >= largestComponent){
+				largestComponent = components.get(i).size();
+			}
+		}
+		
 		System.out.println("Strongly connected components list"+components);
+		
 		
 
 	}
