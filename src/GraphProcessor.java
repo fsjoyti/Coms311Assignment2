@@ -30,7 +30,6 @@ public class GraphProcessor {
 
 	// ArrayList<String> allVertices = new ArrayList<String>();
 	// String[] sortedList;
-	 
 	 /**
 	  * 
 	  * @param graphData
@@ -109,16 +108,24 @@ public class GraphProcessor {
 	public ArrayList<String> componentVertices(String v) {
 		
 		stronglyConnectedComponents(adjacency_list);
-		
-		ArrayList<String> componentVertices = new ArrayList<String>();
-		
+
+		ArrayList<Set> componentVertices = new ArrayList<Set>();
+		 
 		for(int i = 0; i<components.size(); i++){
+			Set component = components.get(i);
 			if(components.get(i).contains(v)){
-				componentVertices =  (ArrayList<String>) components.get(i);
+				
+				componentVertices.add(component);
+				
 			}
 		}
-		
-		return componentVertices;
+		Iterator it = componentVertices.iterator();
+		ArrayList<String> myVertices = new ArrayList<String>();
+		while(it.hasNext()){
+			myVertices.add((String) it.next());
+		}
+		System.out.println("component Vertices is: " +componentVertices);
+		return myVertices;
 
 	}
 
@@ -235,7 +242,7 @@ public class GraphProcessor {
 		
 		LinkedHashMap<String, LinkedHashSet<String>> revGraph = getReversedGraph(Graph);
 		computeOrder(Graph);
-		System.out.println(result);
+		//System.out.println(result);
 		//List<Set<String>> components = new ArrayList<>();
 		visited.clear();
 		while (!result.isEmpty()){
@@ -259,7 +266,10 @@ public class GraphProcessor {
 			}
 		}
 		
-		System.out.println("Strongly connected components list"+components);
+		
+		//System.out.println("Component vartices: " +componentVertices);
+		
+		//System.out.println("Strongly connected components list"+components);
 		
 		
 
@@ -298,7 +308,12 @@ public class GraphProcessor {
 		
 
 	}
-	
+	/**
+	 * Performs DFS on the reverse graph
+	 * @param graph
+	 * @param v
+	 * @param component
+	 */
 	private void DFSReverse(LinkedHashMap<String, LinkedHashSet<String>> graph, String v, Set <String> component){
 		
 		visited.add(v);
