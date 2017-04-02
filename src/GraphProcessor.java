@@ -106,19 +106,32 @@ public class GraphProcessor {
 	 * @param v
 	 * @return
 	 */
-	public ArrayList<String> componentVertices(String v) {
+	public ArrayList <String> componentVertices(String v) {
 		
 		stronglyConnectedComponents(adjacency_list);
 		
-		ArrayList<String> componentVertices = new ArrayList<String>();
+		ArrayList<Set> componentVertices = new ArrayList<Set>();
+		ArrayList <String> vertex = new ArrayList<String>();
 		
 		for(int i = 0; i<components.size(); i++){
+		
 			if(components.get(i).contains(v)){
-				componentVertices =  (ArrayList<String>) components.get(i);
+				Set <String> set =  components.get(i);
+				Iterator<String> iterator = set.iterator();
+				while (iterator.hasNext()){
+					String value = iterator.next();
+					
+					vertex.add(value);
+					
+				}
+				
 			}
 		}
+	
+System.out.println(vertex);
+	return vertex;
 		
-		return componentVertices;
+		//return componentVertices;
 
 	}
 
