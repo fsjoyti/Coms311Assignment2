@@ -12,10 +12,14 @@ public class GraphProcessor {
 	int numVertices;
 	int count = 1;
 	int counter; // used in compute order & finish dfs
+	int t; //[This keeps track of the number of vertices that have been fully explored
+	String s = "";
 	// String[] vertices;
 	HashSet<String> visited_ordered = new HashSet<>();// for compute order and
 														// finish dfs
 	ArrayList<String> finishTimeList = new ArrayList<String>();
+	
+	 Deque<String> result = new ArrayDeque<>();
 
 	// ArrayList<String> allVertices = new ArrayList<String>();
 	// String[] sortedList;
@@ -60,12 +64,14 @@ public class GraphProcessor {
 		// System.out.println("V is : " +v);
 
 		computeOrder(adjacency_list);
+		stronglyConnectedComponents(adjacency_list);
 		System.out.println();
 		return outDegree;
 
 	}
 
 	public boolean sameComponent(String u, String v) {
+		
 		return true;
 	}
 
@@ -89,9 +95,7 @@ public class GraphProcessor {
 
 	}
 
-	private void stronglyConnectedComponents() {
-
-	}
+	
 
 	private LinkedHashMap<String, Integer> sortMap() {
 
@@ -131,21 +135,23 @@ public class GraphProcessor {
 		return sortedMap;
 
 	}
+	/*
+	 * For testing purposes I made it public
+	 */
 
-	private void computeOrder(LinkedHashMap<String, LinkedHashSet<String>> Graph) {
+	public void computeOrder(LinkedHashMap<String, LinkedHashSet<String>> Graph) {
 
-		visited_ordered.clear();
+		
 		// Compute the reversed adjacency list
-		LinkedHashMap<String, LinkedHashSet<String>> revGraph = getReversedGraph(Graph);
-
+		
 		// keep counter
 		counter = 0;
 
 		ArrayList<String> allVertices = new ArrayList<String>();
 		// Store all keys into arrayList
-		allVertices.addAll(revGraph.keySet());
+	
 		for (String key : Graph.keySet()) {
-			System.out.print("key " + key);
+			
 
 			if (!visited.contains(key)) {
 				// DFS(revGraph,key);
@@ -156,33 +162,38 @@ public class GraphProcessor {
 		System.out.println(FinishTime);
 
 	}
-
-	private void FinishDFS(LinkedHashMap<String, LinkedHashSet<String>> graph, String v) {
-
-		visited_ordered.add(v);
-		System.out.println("v in FinishDFS is: " + v);
-
-		ArrayList<String> allVertices = new ArrayList<String>();
-		// Store all keys into arrayList
-		allVertices.addAll(graph.keySet());
-
-		LinkedHashSet<String> set = graph.get(v);
-		System.out.println("Set contains: " + set);
-		Iterator<String> iterator = set.iterator();
-		while (iterator.hasNext()) {
-			String nextVertex = iterator.next();
-			if (!visited_ordered.contains(nextVertex)) {
-				DFS(graph, nextVertex);
-
+	
+	private void stronglyConnectedComponents(LinkedHashMap<String, LinkedHashSet<String>> Graph) {
+		
+		
+		LinkedHashMap<String, LinkedHashSet<String>> revGraph = getReversedGraph(Graph);
+		computeOrder(Graph);
+		System.out.println(result);
+		List<Set<String>> components = new ArrayList<>();
+		visited.clear();
+		while (!result.isEmpty()){
+			String vertice = result.poll();
+			if (visited.contains(vertice)){
+				continue;
 			}
+			HashSet<String> set= new HashSet<String>();
+			DFSReverse(revGraph,vertice,set);
+			components.add(set);
 
+			
 		}
+		System.out.println("Strongly connected components list"+components);
+		
+		
 
 	}
+	
+	
+
 
 	private void DFS(LinkedHashMap<String, LinkedHashSet<String>> graph, String v) {
 		// sortedList = new String[numVertices];
-		ArrayList<String> sortedList = new ArrayList<String>();
+		
 		/*
 		 * for(int i = 0; i<sortedList.length; i++){ sortedList[i] = ""; }
 		 */
@@ -206,7 +217,30 @@ public class GraphProcessor {
 
 		counter++;
 		FinishTime.put(v, counter);
+		result.push(v);
+		
 
+	}
+	
+	private void DFSReverse(LinkedHashMap<String, LinkedHashSet<String>> graph, String v, Set <String> component){
+		
+		visited.add(v);
+		component.add(v);
+		LinkedHashSet<String> set = graph.get(v);
+		if (set != null) {
+			Iterator<String> iterator = set.iterator();
+			while (iterator.hasNext()) {
+				String neighbor = iterator.next();
+				// System.out.println("Neighbour is: " +neighbor);
+				if (!visited.contains(neighbor)) {
+					DFSReverse(graph, neighbor,component);
+				}
+
+			}
+
+		}
+		
+		
 	}
 
 	/**
