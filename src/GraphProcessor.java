@@ -123,6 +123,7 @@ public class GraphProcessor {
 		ArrayList<String> myVertices = new ArrayList<String>();
 		while(it.hasNext()){
 			myVertices.add((String) it.next());
+			System.out.println("myVertices: " +myVertices);
 		}
 		System.out.println("component Vertices is: " +componentVertices);
 		return myVertices;
