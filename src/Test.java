@@ -1,4 +1,6 @@
+import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
@@ -13,13 +15,16 @@ public class Test {
 		//System.out.println("Done");
 		//w.extractLinks("sample.txt");
 		//System.out.println(w.map());
-		GraphProcessor g = new GraphProcessor("testdoc_new");
-		System.out.println("OutDegree is: " +g.outDegree("Chicago"));
+	//	GraphProcessor g = new GraphProcessor("testdoc_new");
+	//	System.out.println("OutDegree is: " +g.outDegree("Chicago"));
 		//System.out.println(g.outDegree("/wiki/Complexity_theory"));
 		//LinkedHashMap<String, LinkedHashSet<String>> newMap = 
 		//System.out.println("Reversed List: " +g.("Chicago"));
 
-		g.stronglyConnectedComponents();
+		//g.stronglyConnectedComponents();
+		
+	    String path = new File("_WikiCrawlerTest_crawl_results.txt").getCanonicalPath();
+	    System.out.println("path of file is: " +path);
 	}
 
 }
