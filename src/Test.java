@@ -18,6 +18,7 @@ public class Test {
 	GraphProcessor g = new GraphProcessor("sampleGraph.txt");
 	
 	System.out.println("OutDegree is: " +g.outDegree("Ames"));
+	System.out.println(g.componentVertices("Minneapolis"));
 		//System.out.println(g.outDegree("/wiki/Complexity_theory"));
 		//LinkedHashMap<String, LinkedHashSet<String>> newMap = 
 		//System.out.println("Reversed List: " +g.("Chicago"));

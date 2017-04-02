@@ -96,7 +96,15 @@ public class GraphProcessor {
 	 */
 	public boolean sameComponent(String u, String v) {
 		
-		return true;
+		stronglyConnectedComponents(adjacency_list);
+		
+		for(int i = 0; i<components.size(); i++){
+			if(components.get(i).contains(u) && components.get(i).contains(v)){
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	/**
@@ -105,28 +113,33 @@ public class GraphProcessor {
 	 * @param v
 	 * @return
 	 */
-	public ArrayList<String> componentVertices(String v) {
+	public ArrayList <String> componentVertices(String v) {
 		
 		stronglyConnectedComponents(adjacency_list);
 
+		
 		ArrayList<Set> componentVertices = new ArrayList<Set>();
-		 
+		ArrayList <String> vertex = new ArrayList<String>();
+		
 		for(int i = 0; i<components.size(); i++){
-			Set component = components.get(i);
+		
 			if(components.get(i).contains(v)){
-				
-				componentVertices.add(component);
+				Set <String> set =  components.get(i);
+				Iterator<String> iterator = set.iterator();
+				while (iterator.hasNext()){
+					String value = iterator.next();
+					
+					vertex.add(value);
+					
+				}
 				
 			}
 		}
-		Iterator it = componentVertices.iterator();
-		ArrayList<String> myVertices = new ArrayList<String>();
-		while(it.hasNext()){
-			myVertices.add((String) it.next());
-			System.out.println("myVertices: " +myVertices);
-		}
-		System.out.println("component Vertices is: " +componentVertices);
-		return myVertices;
+
+	
+		System.out.println("vertex is: " +vertex);
+		return vertex;
+		
 
 	}
 
@@ -257,6 +270,13 @@ public class GraphProcessor {
 
 			
 		}
+		
+		Set<Set<String>> hs = new HashSet<>();
+		hs.addAll(components);
+		components.clear();
+		components.addAll(hs);
+		
+		
 		numComponents = components.size();
 		//System.out.println("Size of SCC: " +components.size());
 		largestComponent = 0;
