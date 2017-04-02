@@ -180,50 +180,64 @@ public class GraphProcessor {
 	 * Returns the BFS path from u to v.
 	 */
 	public ArrayList<String> bfsPath(String u, String v) {
-		return null;
+		ArrayList<String> PathList = new ArrayList<String>();
+		visited.clear();
+		if (u.equals(v)){
+			System.out.println("No such path exist");
+			
+		}
+		
+		
+		Queue<String> queue = new LinkedList<String>();
+		queue.add(u);
+		visited.add(u);
+		PathList.add(u);
+		while (!queue.isEmpty()){
+			if(runBFS(queue.poll(), v, visited, queue, PathList))
+				break;
+		}
+		
+		System.out.println("Pathlist"+PathList);
+		return PathList;
 
+	}
+
+	private boolean runBFS(String v, String u, HashSet<String> visited, Queue<String> queue, ArrayList<String> PathList){
+		
+		if(v.equals(u)){
+			return true;
+		}
+		
+		
+		//if(!visited.contains(u)){
+		else{
+
+			visited.add(v);
+			
+			LinkedHashSet<String> set = adjacency_list.get(v);
+
+			if (set != null) {
+				Iterator<String> iterator = set.iterator();
+				while (iterator.hasNext()) {
+					String neighbor = iterator.next();
+					// System.out.println("Neighbour is: " +neighbor);
+					if (!visited.contains(neighbor)) {
+						PathList.add(neighbor);
+						queue.add(neighbor);
+					}
+
+				}
+
+			
+		}
+		
+		}
+		return false;
+		//}
+		
 	}
 
 	
-
-	private LinkedHashMap<String, Integer> sortMap() {
-
-		// TODO make private
-
-		// String[] sortedList = new String[numVertices];
-
-		// List list = new ArrayList(FinishTime.entrySet());
-
-		List<Integer> mapValues = new ArrayList<Integer>(FinishTime.values());
-		List<String> mapKeys = new ArrayList<String>(FinishTime.keySet());
-		Collections.sort(mapValues);
-		Collections.sort(mapKeys);
-
-		LinkedHashMap<String, Integer> sortedMap = new LinkedHashMap<>();
-
-		Iterator<Integer> valueIt = mapValues.iterator();
-		while (valueIt.hasNext()) {
-			int val = valueIt.next();
-			Iterator<String> keyIt = mapKeys.iterator();
-
-			while (keyIt.hasNext()) {
-				String key = keyIt.next();
-				int comp1 = FinishTime.get(key);
-				int comp2 = val;
-
-				if (comp1 == comp2) {
-					keyIt.remove();
-					sortedMap.put(key, val);
-					break;
-				}
-			}
-		}
-
-		System.out.println(Arrays.asList(sortedMap));
-
-		return sortedMap;
-
-	}
 	/*
 	 * For testing purposes I made it public
 	 */
