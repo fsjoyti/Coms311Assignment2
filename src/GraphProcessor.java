@@ -10,6 +10,7 @@ public class GraphProcessor {
 	Map<String, Integer> FinishTime = new TreeMap<String, Integer>();
 	HashSet<String> visited = new HashSet<>();
 	int numVertices;
+	int numComponents;
 	int count = 1;
 	int counter; // used in compute order & finish dfs
 	int t; //[This keeps track of the number of vertices that have been fully explored
@@ -20,6 +21,8 @@ public class GraphProcessor {
 	ArrayList<String> finishTimeList = new ArrayList<String>();
 	
 	 Deque<String> result = new ArrayDeque<>();
+	 
+	// List<Set<String>> components = new ArrayList<>(); //List of SCcomponents
 
 	// ArrayList<String> allVertices = new ArrayList<String>();
 	// String[] sortedList;
@@ -86,7 +89,10 @@ public class GraphProcessor {
 	}
 
 	public int numComponents() {
-		return 0;
+		
+		//numComponents = components.size();
+		System.out.println("Total number of components are: " +numComponents);
+		return numComponents;
 
 	}
 
@@ -182,8 +188,9 @@ public class GraphProcessor {
 
 			
 		}
+		numComponents = components.size();
+		System.out.println("Size of SCC: " +components.size());
 		System.out.println("Strongly connected components list"+components);
-		
 		
 
 	}
