@@ -185,6 +185,7 @@ public class GraphProcessor {
 	 * @return Returns the BFS path from u to v.
 	 */
 	public ArrayList<String> bfsPath(String u, String v) {
+		visited_nodes.clear();
 
 		visited_nodes.add(u);
 
@@ -200,6 +201,7 @@ public class GraphProcessor {
 			String s = q.poll();
 
 			LinkedHashSet<String> set = adjacency_list.get(s);
+			
 
 			if (set != null) {
 
@@ -228,16 +230,24 @@ public class GraphProcessor {
 		ArrayList<String> returnedPath = new ArrayList<String>();
 		//
 		// System.out.println("Map in BFS is: " +Arrays.asList(parent));
+		if (parent.containsKey(curr) && !u.equals(v)){
 		while (!curr.equals(u)) {
 
 			returnedPath.add(curr);
+			
 			// System.out.println("Returned path is: " +returnedPath);
+			
 
 			curr = new String((parent.get(curr)));
 			// System.out.println("current is: " +curr);
 
 		}
 		returnedPath.add(u);
+		Collections.reverse(returnedPath);
+		}
+		
+		
+		
 		return returnedPath;
 
 	}
