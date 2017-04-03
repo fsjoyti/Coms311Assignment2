@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
  */
 public class _WikiCrawlerTest {
     private WikiCrawler w;
-    private static final String CRAWL_RESULTS_FILENAME = ".../Project2/Coms311Assignment2/_WikiCrawlerTest_crawl_results.txt";
+    private static final String CRAWL_RESULTS_FILENAME = "test/_WikiCrawlerTest_crawl_results.txt";
 
     @Before
     public void setUp() {

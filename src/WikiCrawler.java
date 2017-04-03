@@ -242,10 +242,11 @@ public class WikiCrawler {
 		 */
 
 		private String after_p(String doc) throws IOException {
-
+			/*
 			String modified_doc = "";
-			StringBuilder sb=new StringBuilder();  
+			StringBuilder sb = new StringBuilder();  
 			FileReader file = new FileReader(doc);
+			//Scanner s = new Scanner();
 			
 			try (BufferedReader br = new BufferedReader(file)) {
 
@@ -262,9 +263,21 @@ public class WikiCrawler {
 				}
 	            
 			}
-			modified_doc = modified_doc.substring(modified_doc.indexOf("<p>") );  
+			modified_doc = modified_doc.substring(modified_doc.indexOf("<p>") );  */
 	       																// <P>
-
+			
+			//System.out.println("Documents are: " +doc);
+			String modified_doc = "";
+			int i = doc.indexOf("<p>");
+			
+			if(i < 0){
+				System.out.println("No p tag found");
+			}
+			else{
+				modified_doc = doc.substring(i);
+			}
+		
+			
 			return modified_doc;
 		}
 
