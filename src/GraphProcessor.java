@@ -15,11 +15,14 @@ public class GraphProcessor {
 	// Largest SCC
 	int largestComponent;
 
+	// for the bfs path
+	ArrayList<String> visited_nodes = new ArrayList<String>();
+
 	/**
-     * The shortest path between two nodes in a graph.
-     */
-    private static ArrayList<String> shortestPath = new ArrayList<String>();
-    
+	 * The shortest path between two nodes in a graph.
+	 */
+	private static ArrayList<String> shortestPath = new ArrayList<String>();
+
 	int count = 1;
 	int counter; // used in compute order & finish dfs
 	int t; // [This keeps track of the number of vertices that have been fully
@@ -182,53 +185,63 @@ public class GraphProcessor {
 	 * @return Returns the BFS path from u to v.
 	 */
 	public ArrayList<String> bfsPath(String u, String v) {
-		
-		
-		return finishTimeList;
 
-		
-	}
+		visited_nodes.add(u);
 
-	
+		Map<String, String> parent = new HashMap<String, String>();
 
-	private LinkedHashMap<String, Integer> sortMap() {
+		parent.put(u, null);
 
-		// TODO make private
+		Queue<String> q = new LinkedList<>();
+		q.add(u);
 
-		// String[] sortedList = new String[numVertices];
+		while (!q.isEmpty()) {
 
-		// List list = new ArrayList(FinishTime.entrySet());
+			String s = q.poll();
 
-		List<Integer> mapValues = new ArrayList<Integer>(FinishTime.values());
-		List<String> mapKeys = new ArrayList<String>(FinishTime.keySet());
-		Collections.sort(mapValues);
-		Collections.sort(mapKeys);
+			LinkedHashSet<String> set = adjacency_list.get(s);
 
-		LinkedHashMap<String, Integer> sortedMap = new LinkedHashMap<>();
+			if (set != null) {
 
-		Iterator<Integer> valueIt = mapValues.iterator();
-		while (valueIt.hasNext()) {
-			int val = valueIt.next();
-			Iterator<String> keyIt = mapKeys.iterator();
+				Iterator<String> iterator = set.iterator();
 
-			while (keyIt.hasNext()) {
-				String key = keyIt.next();
-				int comp1 = FinishTime.get(key);
-				int comp2 = val;
+				while (iterator.hasNext()) {
 
-				if (comp1 == comp2) {
-					keyIt.remove();
-					sortedMap.put(key, val);
-					break;
+					String neighbour = iterator.next();
+
+					if (!visited_nodes.contains(neighbour)) {
+
+						parent.put(neighbour, s);
+						q.add(neighbour);
+						visited_nodes.add(neighbour);
+					}
 				}
 			}
 		}
 
-		System.out.println(Arrays.asList(sortedMap));
+		// System.out.println("u is " +u);
+		String curr = "";
 
-		return sortedMap;
+		curr = new String(v);
+
+		System.out.println("Curr is: " + curr);
+		ArrayList<String> returnedPath = new ArrayList<String>();
+		//
+		// System.out.println("Map in BFS is: " +Arrays.asList(parent));
+		while (!curr.equals(u)) {
+
+			returnedPath.add(curr);
+			// System.out.println("Returned path is: " +returnedPath);
+
+			curr = new String((parent.get(curr)));
+			// System.out.println("current is: " +curr);
+
+		}
+		returnedPath.add(u);
+		return returnedPath;
 
 	}
+
 	/*
 	 * For testing purposes I made it public
 	 */

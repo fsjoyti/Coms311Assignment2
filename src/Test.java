@@ -15,9 +15,12 @@ public class Test {
 		//System.out.println("Done");
 		//w.extractLinks("sample.txt");
 		//System.out.println(w.map());
-	//GraphProcessor g = new GraphProcessor("sampleGraph.txt");
+
+	GraphProcessor g = new GraphProcessor("sampleGraph.txt");
+	System.out.println("The BFS path is: " +g.bfsPath("Ames","Minneapolis"));
+	////System.out.println("OutDegree is: " +g.outDegree("Ames"));
 	
-	//System.out.println("OutDegree is: " +g.outDegree("Ames"));
+
 	//System.out.println(g.componentVertices("Minneapolis"));
 		//System.out.println(g.outDegree("/wiki/Complexity_theory"));
 		//LinkedHashMap<String, LinkedHashSet<String>> newMap = 
