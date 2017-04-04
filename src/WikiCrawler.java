@@ -32,7 +32,7 @@ public class WikiCrawler {
 		String seedUrl;
 		int max;
 		int count = 1;
-		String fileName;
+		String filename;
 		String new_doc = "";
 		String htmldoc = "htmldoc.txt";
 		
@@ -48,10 +48,10 @@ public class WikiCrawler {
 		 * @param fileName
 		 *            name of a file–The graph will be written to this file
 		 */
-		public WikiCrawler(String seedUrl, int max, String fileName) {
+		public WikiCrawler(String seedUrl, int max, String filename) {
 			this.seedUrl = seedUrl;
 			this.max = max;
-			this.fileName = fileName;
+			this.filename = filename;
 			
 			
 		}
@@ -86,10 +86,10 @@ public class WikiCrawler {
 					String resulturl = link.substring(x);
 					links.add(resulturl);
 					index++;
-					
+					writer.println(links);
 			        index = matcher.end();
 			}
-			writer.println(links);
+			
 			return links;
 
 		}
@@ -100,7 +100,8 @@ public class WikiCrawler {
 		 */
 		public void crawl() throws IOException,MalformedURLException  {
 
-			 PrintWriter writer = new PrintWriter(fileName, "UTF-8");
+			 PrintWriter writer = new PrintWriter(filename, "UTF-8");
+
 			 writer.println(max);
 
 
@@ -247,38 +248,30 @@ public class WikiCrawler {
 		private String after_p(String doc) throws IOException {
 			
 			String modified_doc = "";
-			//StringBuilder sb = new StringBuilder();  
-			/*FileReader file = new FileReader(doc);
-			
-			//System.out.println("file is: "+file);
-			
-			
-			try (BufferedReader br = new BufferedReader(file)) {
 
-				String line;
+			//StringBuilder sb = new StringBuilder();
+			
+			
+			Scanner s = new Scanner(doc);
+			
+			while (s.hasNext()) {
+				String line = s.next();
+				modified_doc += line;
 				
-				while ((line = br.readLine()) != null ) {
-					//System.out.println(line);
-					
-					modified_doc += line;
-					
-				}
-	            
+				// TODO
+				
 			}
-			modified_doc = modified_doc.substring(modified_doc.indexOf("<p>") );  */
+			
+			modified_doc = modified_doc.substring(modified_doc.indexOf("<p>") ); 
 	       																// <P>
 			
+
 			//System.out.println("Documents are: " +doc);
 			//String modified_doc = "";
-			int i = doc.indexOf("<p>");
+			//int i = doc.indexOf("<p>");
+
 			
-			if(i < 0){
-				System.out.println("No p tag found");
-			}
-			else{
-				modified_doc = doc.substring(i);
-			}
-		
+			
 			
 			
 			return modified_doc;
