@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Queue;
+import java.util.Scanner;
 import java.util.Set;
 import java.net.*;
 
@@ -66,12 +67,14 @@ public class WikiCrawler {
 		 */
 
 		public ArrayList<String> extractLinks(String doc) throws IOException {
-			//PrintWriter writer = new PrintWriter("my_edges.txt", "UTF-8");
+			PrintWriter writer = new PrintWriter("my_links.txt", "UTF-8");
 			new_doc = after_p(doc);
+			//new_doc = doc.substring(doc.indexOf("<p>"));
 			
 			ArrayList<String> links = new ArrayList<String>();
 			String html = new_doc;
 			String regex = "<a\\s?href\\s?=\\s?\"/(\\bwiki)[(/\\w+)%]+\"";
+			//="href=\"/wiki/(.*?)/\""
 			
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(html);
@@ -83,10 +86,10 @@ public class WikiCrawler {
 					String resulturl = link.substring(x);
 					links.add(resulturl);
 					index++;
-
+					
 			        index = matcher.end();
 			}
-			
+			writer.println(links);
 			return links;
 
 		}
@@ -97,7 +100,7 @@ public class WikiCrawler {
 		 */
 		public void crawl() throws IOException,MalformedURLException  {
 
-			 PrintWriter writer = new PrintWriter("my_edges.txt", "UTF-8");
+			 PrintWriter writer = new PrintWriter(fileName, "UTF-8");
 			 writer.println(max);
 
 
@@ -242,21 +245,20 @@ public class WikiCrawler {
 		 */
 
 		private String after_p(String doc) throws IOException {
-			/*
+			
 			String modified_doc = "";
-			StringBuilder sb = new StringBuilder();  
-			FileReader file = new FileReader(doc);
-			//Scanner s = new Scanner();
+			//StringBuilder sb = new StringBuilder();  
+			/*FileReader file = new FileReader(doc);
+			
+			//System.out.println("file is: "+file);
+			
 			
 			try (BufferedReader br = new BufferedReader(file)) {
 
 				String line;
 				
-				
 				while ((line = br.readLine()) != null ) {
 					//System.out.println(line);
-					
-				
 					
 					modified_doc += line;
 					
@@ -267,7 +269,7 @@ public class WikiCrawler {
 	       																// <P>
 			
 			//System.out.println("Documents are: " +doc);
-			String modified_doc = "";
+			//String modified_doc = "";
 			int i = doc.indexOf("<p>");
 			
 			if(i < 0){
@@ -277,6 +279,7 @@ public class WikiCrawler {
 				modified_doc = doc.substring(i);
 			}
 		
+			
 			
 			return modified_doc;
 		}
