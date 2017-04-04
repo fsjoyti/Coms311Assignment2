@@ -235,7 +235,7 @@ public class WikiCrawler {
 				inputLine = in.readLine();
 				
 			}
-			System.out.println(sb.toString());
+		
 			return sb.toString();
 			
 		}
@@ -269,7 +269,7 @@ public class WikiCrawler {
 			modified_doc = modified_doc.substring(modified_doc.indexOf("<p>") ); 
 	       																// <P>
 			
-			System.out.println(modified_doc);
+			
 			
 			
 			return modified_doc;
