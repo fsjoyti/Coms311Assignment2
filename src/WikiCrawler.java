@@ -129,7 +129,7 @@ public class WikiCrawler {
 				 
 				 String currentPage = BASE_URL+v;
 				 
-				String doc= readhtml(currentPage);
+				 String doc= readhtml(currentPage);
 				 links = extractLinks(doc);
 				 reachable_size = links.size();
 				
@@ -137,7 +137,7 @@ public class WikiCrawler {
 					 String unmarked = links.get(i);
 					 unmarked = unmarked.replaceAll("^\"|\"$", "");
 					 
-					
+					int count_Vertices = 0;
 					 if (unmarked.equals(v) == false)
 						 map.get(v).add(unmarked);
 						
@@ -152,7 +152,7 @@ public class WikiCrawler {
 					 
 				 }
 				count++;
-				count_vertices = 0;
+				
 			 }
 			 
 			 for (String key : map.keySet()) {
@@ -257,17 +257,17 @@ public class WikiCrawler {
 //			FileReader file = new FileReader(doc);
 			Scanner s = new Scanner(doc);
 			
-			while (s.hasNext()) {
-				String line = s.next();
-				modified_doc += line;
-	
-				// TODO
-				
-			}
 			
-			
-			modified_doc = modified_doc.substring(modified_doc.indexOf("<p>") ); 
-	       																// <P>
+			 			int i = doc.indexOf("<p>");
+			  			
+			 		if(i < 0){
+			 			System.out.println("No p tag found");
+			 			}
+			 		else{
+			 			modified_doc = doc.substring(i);
+			 		}
+			 	
+			 						// <P>
 			
 			
 			
