@@ -72,7 +72,7 @@ public class WikiCrawler {
 			
 			ArrayList<String> links = new ArrayList<String>();
 			String html = new_doc;
-			String regex = "<a\\s?href\\s?=\\s?\"/(\\bwiki)[(/\\w+)%]+\"";
+			String regex = "<a\\s?href\\s?=\\s?\"/(\\bwiki)/[(/\\w.,+)%@-]+\"";
 			
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(html);
@@ -82,6 +82,7 @@ public class WikiCrawler {
 					String link = matcher.group();
 					int x =link.indexOf("\"");
 					String resulturl = link.substring(x);
+					resulturl  = resulturl.replaceAll("^\"|\"$", "");
 					links.add(resulturl);
 					index++;
 
@@ -209,7 +210,7 @@ public class WikiCrawler {
 		 * @throws IOException
 		 */
 		private String readhtml(String currentPage) throws MalformedURLException, IOException {
-		
+			 
 			//System.out.println("Current page: " +currentPage);
 			URL url = new URL(currentPage);
 			
@@ -224,15 +225,19 @@ public class WikiCrawler {
 			}
 			//String temp = null;
 			StringBuilder sb = new StringBuilder();
+			
 			String inputLine = in.readLine();
 			while((inputLine != null)){
 				sb.append(inputLine);
+			
 				sb.append("\n");
-				
+			
 				inputLine = in.readLine();
-				//System.out.println(inputLine);
+				
 			}
+			System.out.println(sb.toString());
 			return sb.toString();
+			
 		}
 
 		/**
@@ -255,8 +260,7 @@ public class WikiCrawler {
 			while (s.hasNext()) {
 				String line = s.next();
 				modified_doc += line;
-				
-				System.out.println(line);
+	
 				// TODO
 				
 			}
@@ -265,7 +269,7 @@ public class WikiCrawler {
 			modified_doc = modified_doc.substring(modified_doc.indexOf("<p>") ); 
 	       																// <P>
 			
-			
+			System.out.println(modified_doc);
 			
 			
 			return modified_doc;
