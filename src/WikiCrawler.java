@@ -128,8 +128,8 @@ public class WikiCrawler {
 				 
 				 String currentPage = BASE_URL+v;
 				 
-				 readhtml(currentPage);
-				 links = extractLinks(htmldoc);
+				String doc= readhtml(currentPage);
+				 links = extractLinks(doc);
 				 reachable_size = links.size();
 				
 				 for (int i = 0; i < reachable_size; i++){
@@ -208,8 +208,8 @@ public class WikiCrawler {
 		 * @throws MalformedURLException
 		 * @throws IOException
 		 */
-		private void readhtml(String currentPage) throws MalformedURLException, IOException {
-			PrintWriter writer = new PrintWriter(htmldoc, "UTF-8");
+		private String readhtml(String currentPage) throws MalformedURLException, IOException {
+		
 			//System.out.println("Current page: " +currentPage);
 			URL url = new URL(currentPage);
 			
@@ -223,13 +223,16 @@ public class WikiCrawler {
 				connection.setReadTimeout(3*1000);
 			}
 			//String temp = null;
+			StringBuilder sb = new StringBuilder();
 			String inputLine = in.readLine();
 			while((inputLine != null)){
-				writer.print(inputLine);
-				writer.println();
+				sb.append(inputLine);
+				sb.append("\n");
+				
 				inputLine = in.readLine();
 				//System.out.println(inputLine);
 			}
+			return sb.toString();
 		}
 
 		/**
@@ -253,26 +256,12 @@ public class WikiCrawler {
 				String line = s.next();
 				modified_doc += line;
 				
+				System.out.println(line);
 				// TODO
 				
 			}
-			/*
-			try (BufferedReader br = new BufferedReader(file)) {
-
-				String line;
-				
-				
-				while ((line = br.readLine()) != null ) {
-					//System.out.println(line);
-					
-				
-					
-					modified_doc += line;
-					
-				}
-	            
-			}
-			*/
+			
+			
 			modified_doc = modified_doc.substring(modified_doc.indexOf("<p>") ); 
 	       																// <P>
 			
