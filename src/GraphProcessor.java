@@ -226,7 +226,7 @@ public class GraphProcessor {
 
 		curr = new String(v);
 
-		System.out.println("Curr is: " + curr);
+		
 		ArrayList<String> returnedPath = new ArrayList<String>();
 		//
 		// System.out.println("Map in BFS is: " +Arrays.asList(parent));

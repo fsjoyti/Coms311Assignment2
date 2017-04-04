@@ -39,6 +39,9 @@ public class _WikiCrawlerTest {
         }
 
         String[] actual = w.extractLinks(webpage).toArray(new String[0]);
+        for (String line : actual) {
+        	System.out.println(line);
+        }
         String[] expectedLinks = expected.split("\n");
         assertArrayEquals(expectedLinks, actual);
     }

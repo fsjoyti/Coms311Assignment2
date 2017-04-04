@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Queue;
+import java.util.Scanner;
 import java.util.Set;
 import java.net.*;
 
@@ -31,7 +32,7 @@ public class WikiCrawler {
 		String seedUrl;
 		int max;
 		int count = 1;
-		String fileName;
+		String filename;
 		String new_doc = "";
 		String htmldoc = "htmldoc.txt";
 		
@@ -47,10 +48,10 @@ public class WikiCrawler {
 		 * @param fileName
 		 *            name of a file–The graph will be written to this file
 		 */
-		public WikiCrawler(String seedUrl, int max, String fileName) {
+		public WikiCrawler(String seedUrl, int max, String filename) {
 			this.seedUrl = seedUrl;
 			this.max = max;
-			this.fileName = fileName;
+			this.filename = filename;
 			
 			
 		}
@@ -97,7 +98,7 @@ public class WikiCrawler {
 		 */
 		public void crawl() throws IOException,MalformedURLException  {
 
-			 PrintWriter writer = new PrintWriter("my_edges.txt", "UTF-8");
+			 PrintWriter writer = new PrintWriter(filename, "UTF-8");
 			 writer.println(max);
 
 
@@ -242,12 +243,20 @@ public class WikiCrawler {
 		 */
 
 		private String after_p(String doc) throws IOException {
-			/*
+			
 			String modified_doc = "";
 			StringBuilder sb = new StringBuilder();  
-			FileReader file = new FileReader(doc);
-			//Scanner s = new Scanner();
+//			FileReader file = new FileReader(doc);
+			Scanner s = new Scanner(doc);
 			
+			while (s.hasNext()) {
+				String line = s.next();
+				modified_doc += line;
+				
+				// TODO
+				
+			}
+			/*
 			try (BufferedReader br = new BufferedReader(file)) {
 
 				String line;
@@ -263,20 +272,12 @@ public class WikiCrawler {
 				}
 	            
 			}
-			modified_doc = modified_doc.substring(modified_doc.indexOf("<p>") );  */
+			*/
+			modified_doc = modified_doc.substring(modified_doc.indexOf("<p>") ); 
 	       																// <P>
 			
-			//System.out.println("Documents are: " +doc);
-			String modified_doc = "";
-			int i = doc.indexOf("<p>");
 			
-			if(i < 0){
-				System.out.println("No p tag found");
-			}
-			else{
-				modified_doc = doc.substring(i);
-			}
-		
+			
 			
 			return modified_doc;
 		}
