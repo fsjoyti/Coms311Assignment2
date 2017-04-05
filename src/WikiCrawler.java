@@ -72,7 +72,7 @@ public class WikiCrawler {
 			
 			ArrayList<String> links = new ArrayList<String>();
 			String html = new_doc;
-			String regex = "<a\\s?href\\s?=\\s?\"/(\\bwiki)/[(/\\w.,+)%@-]+\"";
+			String regex = "<a\\s?href\\s?=\\s?\"/(\\bwiki)[(/\\w.,+)%@-]+\"";
 			
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(html);

@@ -13,7 +13,7 @@ public class Test {
 		//System.out.println(w.extractLinks("sample.txt"));
 		w.crawl();
 		//System.out.println("Done");
-		//w.extractLinks("sample.txt");
+		w.extractLinks("sample.txt");
 		//System.out.println(w.map());
 
 	GraphProcessor g = new GraphProcessor("sampleGraph.txt");
