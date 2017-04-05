@@ -72,7 +72,7 @@ public class WikiCrawler {
 			
 			ArrayList<String> links = new ArrayList<String>();
 			String html = new_doc;
-			String regex = "<a\\s?href\\s?=\\s?\"/(\\bwiki)/[(/\\w.,+)%@-]+\"";
+			String regex = "[(]?<a\\s?href\\s?=\\s?\"/(\\bwiki)[(/\\w.,+)%@-]+[)]?\"";
 			
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(html);
@@ -83,6 +83,7 @@ public class WikiCrawler {
 					int x =link.indexOf("\"");
 					String resulturl = link.substring(x);
 					resulturl  = resulturl.replaceAll("^\"|\"$", "");
+					System.out.println(resulturl);
 					links.add(resulturl);
 					index++;
 
@@ -230,7 +231,7 @@ public class WikiCrawler {
 			while((inputLine != null)){
 				sb.append(inputLine);
 			
-				sb.append("\n");
+				
 			
 				inputLine = in.readLine();
 				
@@ -255,7 +256,7 @@ public class WikiCrawler {
 			String modified_doc = "";
 			StringBuilder sb = new StringBuilder();  
 //			FileReader file = new FileReader(doc);
-			Scanner s = new Scanner(doc);
+			
 			
 			
 			 			int i = doc.indexOf("<p>");
@@ -268,7 +269,7 @@ public class WikiCrawler {
 			 		}
 			 	
 			 						// <P>
-			
+		
 			
 			
 			
