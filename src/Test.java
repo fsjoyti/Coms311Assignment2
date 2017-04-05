@@ -9,7 +9,7 @@ public class Test {
 	public static void main(String[] args) throws IOException,InterruptedException {
 
 
-		WikiCrawler w = new WikiCrawler("/wiki/Computer Science", 100, "WikiCS.txt");
+		WikiCrawler w = new WikiCrawler("/wiki/Complexity Theory", 100, "WikiCS.txt");
 		//System.out.println(w.extractLinks("sample.txt"));
 		w.crawl();
 		//System.out.println("Done");
