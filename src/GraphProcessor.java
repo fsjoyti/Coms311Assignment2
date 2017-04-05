@@ -1,11 +1,10 @@
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class GraphProcessor {
 
-	LinkedHashMap<String, LinkedHashSet<String>> adjacency_list = new LinkedHashMap<String, LinkedHashSet<String>>();
+	public LinkedHashMap<String, LinkedHashSet<String>> adjacency_list = new LinkedHashMap<String, LinkedHashSet<String>>();
 
 	Map<String, Integer> FinishTime = new TreeMap<String, Integer>();
 	HashSet<String> visited = new HashSet<>();
@@ -21,14 +20,14 @@ public class GraphProcessor {
 	/**
 	 * The shortest path between two nodes in a graph.
 	 */
-	private static ArrayList<String> shortestPath = new ArrayList<String>();
+//	private static ArrayList<String> shortestPath = new ArrayList<String>();
 
 	int count = 1;
 	int counter; // used in compute order & finish dfs
-	int t; // [This keeps track of the number of vertices that have been fully
+	int t; // This keeps track of the number of vertices that have been fully
 			// explored
 	String s = "";
-	// String[] vertices;
+	
 	HashSet<String> visited_ordered = new HashSet<>();// for compute order and
 														// finish dfs
 	ArrayList<String> finishTimeList = new ArrayList<String>();
@@ -37,8 +36,6 @@ public class GraphProcessor {
 
 	List<Set<String>> components = new ArrayList<>(); // List of SCcomponents
 
-	// ArrayList<String> allVertices = new ArrayList<String>();
-	// String[] sortedList;
 	/**
 	 * 
 	 * @param graphData
@@ -47,7 +44,6 @@ public class GraphProcessor {
 	 */
 	public GraphProcessor(String graphData) throws FileNotFoundException {
 
-		int verticesCounter = 0;
 		File f = new File(graphData);
 		Scanner input = new Scanner(f);
 		this.numVertices = (Integer.parseInt(input.next()));
@@ -65,14 +61,13 @@ public class GraphProcessor {
 
 		}
 
-		System.out.println("OriginalList: " + adjacency_list);
+		//System.out.println("OriginalList: " + adjacency_list);
 		// System.out.println("map: " +myMap);
 		// System.out.println("My vertices Array: " +Arrays.asList(vertices));
 	}
 
 	/**
 	 * Returns the out degree of v.
-	 * 
 	 * @param v
 	 * @return
 	 */
@@ -80,15 +75,14 @@ public class GraphProcessor {
 
 		int outDegree = 0;
 		if (adjacency_list.containsKey(v)) {
-			// LinkedList<String> list = (LinkedList<String>)
-			// adjacency_list.get(v);
+			
 			LinkedHashSet<String> set = adjacency_list.get(v);
 			outDegree = set.size();
+			//System.out.println("out degree for: " +set +"is: " +outDegree);
 		}
 
 		computeOrder(adjacency_list);
-		// stronglyConnectedComponents(adjacency_list);
-		System.out.println();
+		
 		return outDegree;
 
 	}
@@ -124,7 +118,6 @@ public class GraphProcessor {
 
 		stronglyConnectedComponents(adjacency_list);
 
-		ArrayList<Set> componentVertices = new ArrayList<Set>();
 		ArrayList<String> vertex = new ArrayList<String>();
 
 		for (int i = 0; i < components.size(); i++) {
@@ -257,13 +250,10 @@ public class GraphProcessor {
 	 */
 
 	private void computeOrder(LinkedHashMap<String, LinkedHashSet<String>> Graph) {
-
-		// Compute the reversed adjacency list
-
+		
 		// keep counter
 		counter = 0;
 
-		ArrayList<String> allVertices = new ArrayList<String>();
 		// Store all keys into arrayList
 
 		for (String key : Graph.keySet()) {
@@ -274,7 +264,7 @@ public class GraphProcessor {
 
 			}
 		}
-		System.out.println(FinishTime);
+		//System.out.println(FinishTime);
 
 	}
 

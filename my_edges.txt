@@ -1,5 +1,4 @@
 20
-<<<<<<< HEAD
 /wiki/Complexity_theory /wiki/Complex_system
 /wiki/Complexity_theory /wiki/Complex_systems
 /wiki/Complexity_theory /wiki/Complexity_theory_and_organizations
@@ -115,5 +114,3 @@
 /wiki/Ecosystem /wiki/Main_Page
 /wiki/Cell_(biology) /wiki/Ecosystem
 /wiki/Cell_(biology) /wiki/Main_Page
-=======
->>>>>>> 459dcfa5f7fe9b5c98e4bb6e33776ee426d0b55b
